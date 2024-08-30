@@ -1,0 +1,33 @@
+.container2 {
+  width: 82%;
+  float: right;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+@media only screen and (max-width: 899px) {
+  .container2 {
+    width: 100% !important;
+  }
+}
+@media only screen and (min-width: 900px) {
+  .container2 {
+    width: 74% !important;
+  }
+}
+@media only screen and (min-width: 1080px) {
+  .container2 {
+    width: 80% !important;
+  }
+}
+.container2sub {
+  width: 77% !important;
+}
