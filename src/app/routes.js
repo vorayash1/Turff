@@ -26,14 +26,14 @@ const MyAuction = Loadable(lazy(() => import("app/auction/myturff")));
 // const JwtRegister1 = Loadable(lazy(() => import("app/auction/signUp")));
 const SimpleForm = Loadable(lazy(() => import("app/auction/addauction")));
 const EditSimpleForm = Loadable(lazy(() => import("./auction/editauction")));
-const PlayerList = Loadable(lazy(() => import("./auction/player/list")));
-const AddPlayerPage = Loadable(lazy(() => import("./auction/player/addplayer")));
-const TeamList = Loadable(lazy(() => import("./auction/team/list")));
-const CreateTeam = Loadable(lazy(() => import("./auction/team/addteam")));
-const EditPlayerPage = Loadable(lazy(() => import("./auction/player/edit")));
+const PlayerList = Loadable(lazy(() => import("./auction/booking/list")));
+const AddPlayerPage = Loadable(lazy(() => import("./auction/booking/addplayer")));
+const TeamList = Loadable(lazy(() => import("./auction/slot/list")));
+const CreateTeam = Loadable(lazy(() => import("./auction/slot/addteam")));
+const EditPlayerPage = Loadable(lazy(() => import("./auction/booking/edit")));
 // const UpdateSponsor = Loadable(lazy(() => import("./auction/sponsor/edit")));
 // const UpdateRule = Loadable(lazy(() => import("./auction/incrementrules/edit")));
-const UpdateTeam = Loadable(lazy(() => import("./auction/team/edit")));
+const UpdateTeam = Loadable(lazy(() => import("./auction/slot/edit")));
 
 const routes = [
   {
@@ -53,16 +53,16 @@ const routes = [
 
   //my auction page
   { path: "/auction/editauction", element: <EditSimpleForm /> },
-  { path: "/auction/team/edit", element: <UpdateTeam /> },
-  { path: "/auction/player/addplayer", element: <AddPlayerPage /> },
-  { path: "/auction/player/edit", element: <EditPlayerPage /> },
-  { path: "/auction/team/list", element: <TeamList /> },
-  { path: "/auction/team/addteam", element: <CreateTeam /> },
-  { path: "/auction/player/list", element: <PlayerList /> },
+  { path: "/auction/slot/edit", element: <UpdateTeam /> },
+  { path: "/auction/booking/addplayer", element: <AddPlayerPage /> },
+  { path: "/auction/booking/edit", element: <EditPlayerPage /> },
+  { path: "/auction/slot/list", element: <TeamList /> },
+  { path: "/auction/slot/addteam", element: <CreateTeam /> },
+  { path: "/auction/booking/list", element: <PlayerList /> },
   { path: "/auction/myturff", element: <MyAuction /> },
   { path: "/auction/profile", element: <Profile /> },
   { path: "/auction/addauction", element: <SimpleForm /> },
-  // { path: "/auction/player/addplayer/:uniqueCode", element: <AddPlayerPage /> },
+  // { path: "/auction/booking/addplayer/:uniqueCode", element: <AddPlayerPage /> },
 
   // session pages route
   { path: "/session/404", element: <NotFound /> },

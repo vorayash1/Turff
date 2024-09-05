@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (user_mail, user_password) => {
     try {
-      const response = await axios.post("https://54ab838584.nxcli.io/auction_portal/user_login.php", { user_mail, user_password });
+      const response = await axios.post("https://myallapps.tech:3024/api/admin/auth/login", { email, password });
       const user = response.data;
       if (user.status === "success") {
         localStorage.setItem('user', JSON.stringify(user)); // Store user data in localStorage
@@ -64,7 +64,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const register = async (user_mail, user_name, user_password) => {
-    const response = await axios.post("https://54ab838584.nxcli.io/auction_portal/user_registation.php", { user_mail, user_name, user_password });
+    const response = await axios.post("", { user_mail, user_name, user_password });
     const { user } = response.data;
 
     dispatch({ type: "REGISTER", payload: { user } });
