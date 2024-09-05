@@ -46,7 +46,7 @@ const AuthContext = createContext({
 export const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
-  const login = async (user_mail, user_password) => {
+  const login = async (email, password) => {
     try {
       const response = await axios.post("https://myallapps.tech:3024/api/admin/auth/login", { email, password });
       const user = response.data;
