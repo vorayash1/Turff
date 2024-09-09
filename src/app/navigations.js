@@ -1,5 +1,5 @@
 export const navigations = [
-  { name: "Dashboard", path: "/dashboard/default", icon: "dashboard" },
+  { name: "Dashboard", path: "/dashboard/Analytics", icon: "dashboard" },
   { name: "My Turff", path: "/auction/myturff", icon: "account_balance" },
   // { name: "Buy Teams", path: "/auction/team", icon: "euro_symbol" },
   // { name: "Player Dashboard", path: "/auction/player/dashboard", icon: "woman" },

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import '@grapecity/wijmo.styles/wijmo.css';
 import React, { useEffect, useRef } from 'react';
 import './myauction.css';
-import './auction.css';
+import './turf.css';
 import useSettings from "app/hooks/useSettings";
 // import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { useMediaQuery, useTheme } from "@mui/material";
@@ -53,13 +53,13 @@ export default function MyAuction() {
     const ref = useRef({ isMdScreen, settings });
 
     const handleEdit = () => {
-        navigate("/auction/editauction");
+        navigate("/auction/editturf");
         // toast.info("Navigating to edit auction page.");
     };
 
-    const handleList = (auctionData) => {
+    const handleList = () => {
         // navigate("/desired-route");
-        navigate("/auction/player/list");
+        navigate("/auction/booking/list");
         toast.info("Navigating to player list page.");
     };
 
@@ -92,7 +92,7 @@ export default function MyAuction() {
                             <div className="row mb-3">
                                 <div className="col-md-12 text-center">
                                     <button
-                                        onClick={() => navigate("/auction/addauction")}
+                                        onClick={() => navigate("/auction/addturf")}
                                         className={`btn btn-sm btn-success mb-2`}
                                     // disabled={auctionData && auctionData[0] && auctionData[0].status === "1" ? true : false}
                                     >
@@ -147,7 +147,7 @@ export default function MyAuction() {
                                                 <div class="tooltip-wrapper" b-zwztpb54d6>
                                                     <a href>
                                                         <span data-toggle="tooltip" data-html="true">
-                                                            <button type="button" class="tooltips mdc-icon-button mdc-ripple-upgraded--unbounded mdc-ripple-upgraded" onClick={() => navigate("/auction/team/list")} >
+                                                            <button type="button" class="tooltips mdc-icon-button mdc-ripple-upgraded--unbounded mdc-ripple-upgraded" onClick={() => navigate("/auction/slot/list")} >
                                                                 <i class="material-icons" >person</i>
                                                                 <span class="tooltiptexts">Change slot vise price</span>
                                                             </button>

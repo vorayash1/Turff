@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import Layout1Sidenav from 'app/components/MatxLayout/Layout1/Layout1Sidenav';
 import SidenavTheme from "app/components/MatxTheme/SidenavTheme/SidenavTheme";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../auction.css';
+import '../turf.css';
 
 function AddPlayerPage() {
     const navigate = useNavigate();

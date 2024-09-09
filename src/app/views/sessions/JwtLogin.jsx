@@ -46,16 +46,16 @@ const StyledRoot = styled("div")(() => ({
 }));
 
 const initialValues = {
-  user_mail: "",
-  user_password: "",
+  email: "",
+  password: "",
   remember: true
 };
 
 const validationSchema = Yup.object().shape({
-  user_password: Yup.string()
-    .min(6, "Password must be at least 6 characters long")
+  password: Yup.string()
+    .min(1, "Password must be at least 6 characters long")
     .required("Password is required!"),
-  user_mail: Yup.string().email("Invalid Email address").required("Email is required!")
+  email: Yup.string().email("Invalid Email address").required("Email is required!")
 });
 
 export default function JwtLogin() {
@@ -69,8 +69,8 @@ export default function JwtLogin() {
   const handleFormSubmit = async (values) => {
     setLoading(true);
     try {
-      await login(values.user_mail, values.user_password);
-      navigate("/dashboard/default");
+      await login(values.email, values.password);
+      navigate("/dashboard/Analytics");
     } catch (error) {
       console.error("Login failed:", error);
       setError("Login failed. Invalid Email Or Password."); // Set error message
@@ -105,28 +105,28 @@ export default function JwtLogin() {
                       fullWidth
                       size="small"
                       type="email"
-                      name="user_mail"
+                      name="email"
                       label="Email"
                       variant="outlined"
                       onBlur={handleBlur}
-                      value={values.user_mail}
+                      value={values.email}
                       onChange={handleChange}
-                      helperText={touched.user_mail && errors.user_mail}
-                      error={Boolean(errors.user_mail && touched.user_mail)}
+                      helperText={touched.email && errors.email}
+                      error={Boolean(errors.email && touched.email)}
                       sx={{ mb: 3 }}
                     />
                     <TextField
                       fullWidth
                       size="small"
-                      name="user_password"
+                      name="password"
                       type={showPassword ? "text" : "password"} // Toggle password visibility
                       label="Password"
                       variant="outlined"
                       onBlur={handleBlur}
-                      value={values.user_password}
+                      value={values.password}
                       onChange={handleChange}
-                      helperText={touched.user_password && errors.user_password}
-                      error={Boolean(errors.user_password && touched.user_password)}
+                      helperText={touched.password && errors.password}
+                      error={Boolean(errors.password && touched.password)}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">

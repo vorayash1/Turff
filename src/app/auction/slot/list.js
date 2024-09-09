@@ -7,7 +7,7 @@ import SidenavTheme from "app/components/MatxTheme/SidenavTheme/SidenavTheme";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import "../auction.css";
+import "../turf.css";
 
 function TeamList() {
     const { settings, updateSettings } = useSettings();
@@ -51,13 +51,13 @@ function TeamList() {
                             <br></br>
                             <div class="row mb-3">
                                 <div class="col-md-12 text-center">
-                                    <Button onClick={() => navigate("/auction/team/addteam")} class="btn btn-sm btn-success mb-2" style={{ marginRight: "1vw" }}>
+                                    <Button onClick={() => navigate("/auction/slot/addslot")} class="btn btn-sm btn-success mb-2" style={{ marginRight: "1vw" }}>
                                         Add Slot
                                     </Button>
                                     {/* <a style={{ marginRight: "1vw" }} href="/auction/team" class="btn btn-sm btn-success mb-2">
                                         Buy More Teams
                                     </a> */}
-                                    <a href="/auction/myauction" class="btn btn-link">Back</a>
+                                    <a href="/auction/myturff" class="btn btn-link">Back</a>
                                 </div>
                                 <div className="table-responsive">
                                     <table className="mat-elevation-z5 mdc-table">
@@ -73,14 +73,14 @@ function TeamList() {
                                         <tbody>
                                             <tr className="mdc-table-row">
                                                 <td className='auction-row'>
-                                                    <div class="tooltip-wrapper" b-zwztpb54d6>
+                                                    {/* <div class="tooltip-wrapper" b-zwztpb54d6>
                                                         <a href>
                                                             <button type="button" class="tooltips mdc-icon-button mdc-ripple-upgraded--unbounded mdc-ripple-upgraded" >
                                                                 <i class="material-icons">delete</i>
                                                                 <span class="tooltiptexts">Delete Slot</span>
                                                             </button>
                                                         </a>
-                                                    </div>
+                                                    </div> */}
                                                 </td>
                                                 <td></td>
                                                 <td></td>

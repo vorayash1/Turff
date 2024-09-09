@@ -11,7 +11,7 @@ import axios from 'axios';
 const SimpleForm = () => {
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState('');
-    const [auctionLogoFile, setAuctionLogoFile] = useState(null);
+    const [imageFile, setImageFile] = useState(null);  // updated to match "image" field in API
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('user');
@@ -20,22 +20,24 @@ const SimpleForm = () => {
         }
     }, []);
 
+    // Updated state with required fields
     const [state, setState] = useState({
         name: '',
-        auction_date: new Date().toISOString().split('T')[0],
-        type_sport: '',
-        point_per_team: '',
-        min_bid: '',
-        bid_increase_by: '',
-        player_per_team: '',
+        address: '',
+        lat: '',
+        lng: '',
+        ccode: '',
+        phone: '',
+        city: '',
+        sport_type: '',
     });
 
     const navigate = useNavigate();
 
     const handleChange = (event) => {
         const { name, value, files } = event.target;
-        if (name === 'auction_logo' && files.length > 0) {
-            setAuctionLogoFile(files[0]);
+        if (name === 'image' && files.length > 0) {
+            setImageFile(files[0]);  // store the selected image
         } else {
             setState({ ...state, [name]: value });
         }
@@ -44,19 +46,25 @@ const SimpleForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        if (auctionLogoFile) {
-            formData.append('auction_logo', auctionLogoFile);
+        if (imageFile) {
+            formData.append('image', imageFile);  // append image to form data
         }
 
         const payload = {
             ...state,
-            user_id: userData ? userData.id : null
+            user_id: userData ? userData.id : null  // include user_id if available
         };
 
         formData.append('data', JSON.stringify(payload));
 
         try {
-            navigate('/auction/myauction');
+            const response = await axios.post('http://myallapps.tech:3024/api/admin/tuff/create', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log('Auction created successfully:', response.data);
+            navigate('/auction/myturff');  // navigate on successful submission
         } catch (error) {
             console.error('Error adding auction:', error);
             setError('Error adding auction. Please try again later.');
@@ -66,14 +74,15 @@ const SimpleForm = () => {
     const handleCancel = () => {
         setState({
             name: '',
-            auction_date: new Date().toISOString().split('T')[0],
-            type_sport: '',
-            point_per_team: '',
-            min_bid: '',
-            bid_increase_by: '',
-            player_per_team: '',
+            address: '',
+            lat: '',
+            lng: '',
+            ccode: '',
+            phone: '',
+            city: '',
+            sport_type: '',
         });
-        setAuctionLogoFile(null);
+        setImageFile(null);
     };
 
     const { settings, updateSettings } = useSettings();
@@ -117,11 +126,11 @@ const SimpleForm = () => {
                     Create Turff
                 </Typography>
                 <form onSubmit={handleSubmit}>
-                    <Grid container spacing={3}>
+                    <Grid container spacing={3} style={{ paddingRight: "10px" }}>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 type="file"
-                                name="turff_logo"
+                                name="image"  // updated field name for API
                                 label=""
                                 onChange={handleChange}
                                 fullWidth
@@ -138,59 +147,83 @@ const SimpleForm = () => {
                                 required
                                 value={state.name}
                                 inputProps={{ pattern: "^[a-zA-Z0-9 ]{3,50}$" }}
-                            // error={!/^[a-zA-Z0-9 ]{3,50}$/.test(state.name)}
-                            // helperText={!/^[a-zA-Z0-9 ]{3,50}$/.test(state.name) ? "Name must be 3-50 characters long and can only contain letters, numbers, and spaces." : ""}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                type="number"
-                                name="number_of_turff_pitch"
-                                label="Numbers of pitch in your turff (Required)"
-                                onChange={handleChange}
-                                fullWidth
-                                required
-                                value={state.point_per_team}
-                                inputProps={{ min: 1 }}
-                                // error={state.point_per_team <= 0}
-                                // helperText={state.point_per_team <= 0 ? "Numbers of pitch must be a positive number." : ""}
-                                className="no-spinner" // Add class name for styling
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                type="number"
-                                name="min_bid"
-                                label="Default Price for your turff (Required)"
-                                onChange={handleChange}
-                                fullWidth
-                                required
-                                value={state.min_bid}
-                                inputProps={{ min: 1 }}
-                            // error={state.min_bid <= 0}
-                            // helperText={state.min_bid <= 0 ? "Default Price must be a positive number." : ""}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 type="text"
-                                name="bid_increase_by"
-                                label="Owner Name (Required)"
+                                name="address"
+                                label="Address (Required)"
                                 onChange={handleChange}
                                 fullWidth
                                 required
-                                value={state.bid_increase_by}
+                                value={state.address}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                type="number"
-                                name="player_per_team"
-                                label="Owner's Phone Number (Required)"
+                                type="text"
+                                name="lat"
+                                label="Latitude (Required)"
                                 onChange={handleChange}
                                 fullWidth
                                 required
-                                value={state.player_per_team}
+                                value={state.lat}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                type="text"
+                                name="lng"
+                                label="Longitude (Required)"
+                                onChange={handleChange}
+                                fullWidth
+                                required
+                                value={state.lng}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                type="text"
+                                name="ccode"
+                                label="Country Code (Required)"
+                                onChange={handleChange}
+                                fullWidth
+                                required
+                                value={state.ccode}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                type="text"
+                                name="phone"
+                                label="Phone (Required)"
+                                onChange={handleChange}
+                                fullWidth
+                                required
+                                value={state.phone}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                type="text"
+                                name="city"
+                                label="City (Required)"
+                                onChange={handleChange}
+                                fullWidth
+                                required
+                                value={state.city}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                type="text"
+                                name="sport_type"
+                                label="Sport Type (Required)"
+                                onChange={handleChange}
+                                fullWidth
+                                required
+                                value={state.sport_type}
                             />
                         </Grid>
                         <Grid item xs={12} sx={{ textAlign: 'center' }}>
@@ -208,7 +241,7 @@ const SimpleForm = () => {
                         </Grid>
                     </Grid>
                 </form>
-            </div>
+            </div >
         </>
     );
 };

@@ -615,6 +615,7 @@ tr {
   border-color: inherit;
   border-style: solid;
   border-width: 0;
+  width: 100%;
 }
 .mdc-table-header-row {
   height: 56px;

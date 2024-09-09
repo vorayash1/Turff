@@ -31,10 +31,10 @@ const Heading = styled("h6")(({ theme }) => ({
 
 export default function StatCards() {
   const cardList = [
-    { name: "New Auction", amount: 10, Icon: Group },
-    { name: "This week Auction", amount: "4", Icon: Gavel },
-    { name: "Total Auction Till now", amount: "137", Icon: Store },
-    { name: "Upcoming Auction", amount: "6", Icon: Upcoming }
+    { name: "Total turff", amount: 67, Icon: Group },
+    { name: "This week Bookings", amount: "20", Icon: Gavel },
+    { name: "Active turff", amount: "137", Icon: Store },
+    { name: "Inactive turff", amount: "6", Icon: Upcoming }
   ];
 
   return (

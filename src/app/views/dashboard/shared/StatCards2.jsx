@@ -71,10 +71,10 @@ export default function StatCards2() {
             <FabIcon size="medium" sx={{ backgroundColor: bgError, overflow: "hidden" }}>
               <StarOutline color="error" />
             </FabIcon>
-            <H3 color="error.main" fontSize="10px">Total Amount Of Bid </H3>
+            <H3 color="error.main" fontSize="10px">Total City </H3>
           </ContentBox>
           <ContentBox sx={{ p: 2 }}>
-            <H1>₹2.8M</H1>
+            <H1>200</H1>
             <IconBox sx={{ backgroundColor: "success.main" }}>
               <ExpandLess className="icon" />
             </IconBox>

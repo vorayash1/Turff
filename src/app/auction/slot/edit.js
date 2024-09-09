@@ -5,7 +5,7 @@ import useSettings from "app/hooks/useSettings";
 import { useMediaQuery, useTheme } from "@mui/material";
 import Layout1Sidenav from 'app/components/MatxLayout/Layout1/Layout1Sidenav';
 import SidenavTheme from "app/components/MatxTheme/SidenavTheme/SidenavTheme";
-import "../auction.css";
+import "../turf.css";
 
 function UpdateTeam() {
     const navigate = useNavigate();

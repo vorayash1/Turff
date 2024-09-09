@@ -7,7 +7,7 @@ import Layout1Sidenav from 'app/components/MatxLayout/Layout1/Layout1Sidenav';
 import SidenavTheme from "app/components/MatxTheme/SidenavTheme/SidenavTheme";
 import "./list.css";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../auction.css';
+import '../turf.css';
 import 'react-toastify/dist/ReactToastify.css';
 
 const Container = styled("div")(({ theme }) => ({

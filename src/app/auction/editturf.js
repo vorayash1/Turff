@@ -6,26 +6,26 @@ import { useMediaQuery, useTheme } from "@mui/material";
 import Layout1Sidenav from 'app/components/MatxLayout/Layout1/Layout1Sidenav';
 import SidenavTheme from "app/components/MatxTheme/SidenavTheme/SidenavTheme";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import "./auction.css";
+import "./turf.css";
 import axios from 'axios';
 
 const EditSimpleForm = () => {
     const [state, setState] = useState({
-        auction_logo: null,
+        tuff_id: '', // Adding tuff_id for update
         name: '',
-        auction_date: new Date().toISOString().split('T')[0],
-        type_sport: '',
-        point_per_team: '',
-        min_bid: '',
-        bid_increase_by: '',
-        player_per_team: '',
+        address: '',
+        lat: '',
+        lng: '',
+        ccode: '',
+        phone: '',
+        image: null,
+        delete_img_id: '', // Adding delete_img_id field
     });
+
     const [logoUrl, setLogoUrl] = useState('');
-    // const [currentLogoUrl, setCurrentLogoUrl] = useState('');
     const [selectedFileName, setSelectedFileName] = useState('');
     const navigate = useNavigate();
 
-    // Retrieve userId from localStorage
     const storedUserData = localStorage.getItem('user');
     let userId = null;
     if (storedUserData) {
@@ -33,51 +33,45 @@ const EditSimpleForm = () => {
         userId = userData.id;
     }
 
-    // Retrieve auctionId from localStorage
-    const storedAuctionData = localStorage.getItem('auctionData');
-    let auctionId = null;
-    if (storedAuctionData) {
-        const auctionDataArray = JSON.parse(storedAuctionData);
-        if (Array.isArray(auctionDataArray) && auctionDataArray.length > 0) {
-            const firstAuction = auctionDataArray[0];
-            auctionId = firstAuction.id;
-        }
+    const storedTuffData = localStorage.getItem('tuffData');
+    let tuffId = null;
+    if (storedTuffData) {
+        const tuffData = JSON.parse(storedTuffData);
+        tuffId = tuffData.id;
     }
 
-    const fetchAuctionData = async () => {
+    const fetchTuffData = async () => {
         try {
-            const response = await axios.get('https://54ab838584.nxcli.io/auction_portal/n.php', {
-                params: { auctionId, user_id: userId }
+            const response = await axios.get('http://myallapps.tech:3024/api/admin/tuff/detail', {
+                params: { tuff_id: tuffId }
             });
             const data = response.data;
+
             setState({
-                auction_logo: null,
-                name: data.data.auction_name || '',
-                auction_date: data.data.auction_date || new Date().toISOString().split('T')[0],
-                type_sport: data.data.type_sport || '',
-                point_per_team: data.data.point_per_team || '',
-                min_bid: data.data.min_bid || '',
-                bid_increase_by: data.data.bid_increase || '',
-                player_per_team: data.data.player_per_team || '',
+                tuff_id: tuffId,
+                name: data.name || '',
+                address: data.address || '',
+                lat: data.lat || '',
+                lng: data.lng || '',
+                ccode: data.ccode || '',
+                phone: data.phone || '',
+                delete_img_id: '', // Reset on fetch
             });
-            const logoPath = data.data.auction_logo ? data.data.auction_logo.replace('C:fakepath', 'https://54ab838584.nxcli.io/auction_portal/') : '';
-            setLogoUrl(logoPath);
-            // setCurrentLogoUrl(logoPath);
+            setLogoUrl(data.image_url || '');
         } catch (error) {
-            console.error('Error fetching auction data', error);
+            console.error('Error fetching tuff data', error);
         }
     };
 
     useEffect(() => {
-        if (auctionId && userId) {
-            fetchAuctionData();
+        if (tuffId) {
+            fetchTuffData();
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [auctionId, userId]);
+    }, [tuffId]);
 
     const handleChange = (event) => {
         const { name, value, files } = event.target;
-        if (name === 'auction_logo' && files.length > 0) {
+        if (name === 'image' && files.length > 0) {
             setState({ ...state, [name]: files[0] });
             setSelectedFileName(files[0].name);
         } else {
@@ -88,41 +82,35 @@ const EditSimpleForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Extracting data from state
-        const { auction_logo, name, auction_date, type_sport, point_per_team, min_bid, bid_increase_by, player_per_team } = state;
+        const { tuff_id, name, address, lat, lng, image, ccode, phone, delete_img_id } = state;
         const formData = new FormData();
-        if (auction_logo) {
-            formData.append('auction_logo', auction_logo, auction_logo.name);
+        if (image) {
+            formData.append('image', image, image.name);
         }
 
-        // Constructing payload object
         const payload = {
-            auctionId,
-            user_id: userId,
+            tuff_id,
             name,
-            auction_date,
-            type_sport,
-            point_per_team,
-            min_bid,
-            bid_increase_by,
-            player_per_team,
-            // current_logo_url: currentLogoUrl
+            address,
+            lat,
+            lng,
+            ccode,
+            phone,
+            delete_img_id,
         };
 
         formData.append('data', JSON.stringify(payload));
 
         try {
-            // Sending data via POST request
-            const response = await axios.post('https://54ab838584.nxcli.io/auction_portal/edit_auction.php', formData, {
+            const response = await axios.post('http://myallapps.tech:3024/api/admin/tuff/update', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }
             });
 
-            // Handling response
             if (response.status === 200) {
                 console.log('Form Submitted:', response.data);
-                navigate('/auction/myauction');
+                navigate('/tuff/mytuff');
             } else {
                 console.error('Error submitting the form:', response.statusText);
                 alert('Error submitting the form. Please try again later.');
@@ -134,7 +122,7 @@ const EditSimpleForm = () => {
     };
 
     const handleCancel = () => {
-        fetchAuctionData(); // reset the form to original data
+        fetchTuffData();
         navigate(-1);
     };
 
@@ -154,8 +142,8 @@ const EditSimpleForm = () => {
             let mode = isMdScreen ? "close" : sidebarMode;
             updateSettings({ layout1Settings: { leftSidebar: { mode } } });
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isMdScreen]);
+
     const ref = useRef({ isMdScreen, settings });
 
     return (
@@ -176,14 +164,14 @@ const EditSimpleForm = () => {
                     Go Back
                 </Button>
                 <Typography variant="h4" align="center" gutterBottom>
-                    Edit Auction
+                    Edit Tuff
                 </Typography>
                 <form onSubmit={handleSubmit} style={{ margin: "20px" }}>
                     <Grid container spacing={3}>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 type="file"
-                                name="auction_logo"
+                                name="image"
                                 onChange={handleChange}
                                 fullWidth
                                 InputLabelProps={{ shrink: true }}
@@ -198,13 +186,13 @@ const EditSimpleForm = () => {
                             )}
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            {logoUrl && <img src={logoUrl} alt="Auction Logo" style={{ width: "250px", height: "250px", marginBottom: '10px' }} />}
+                            {logoUrl && <img src={logoUrl} alt="Tuff Pic" style={{ width: "250px", height: "250px", marginBottom: '10px' }} />}
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 type="text"
                                 name="name"
-                                label="Auction Name (Required)"
+                                label="Tuff Name (Required)"
                                 onChange={handleChange}
                                 fullWidth
                                 required
@@ -213,69 +201,67 @@ const EditSimpleForm = () => {
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                type="date"
-                                name="auction_date"
-                                label="Auction Date (Required)"
+                                type="text"
+                                name="address"
+                                label="Address (Required)"
                                 onChange={handleChange}
                                 fullWidth
                                 required
-                                InputLabelProps={{ shrink: true }}
-                                value={state.auction_date}
+                                value={state.address}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 type="text"
-                                name="type_sport"
-                                label="Type of Sport (Required)"
+                                name="lat"
+                                label="Latitude (Required)"
                                 onChange={handleChange}
                                 fullWidth
                                 required
-                                value={state.type_sport}
+                                value={state.lat}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                type="number"
-                                name="point_per_team"
-                                label="Points per Team (Required)"
+                                type="text"
+                                name="lng"
+                                label="Longitude (Required)"
                                 onChange={handleChange}
                                 fullWidth
                                 required
-                                value={state.point_per_team}
+                                value={state.lng}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                type="number"
-                                name="min_bid"
-                                label="Minimum Bid (Required)"
+                                type="text"
+                                name="ccode"
+                                label="Country Code (Required)"
                                 onChange={handleChange}
                                 fullWidth
                                 required
-                                value={state.min_bid}
+                                value={state.ccode}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                type="number"
-                                name="bid_increase_by"
-                                label="Bid Increase By (Required)"
+                                type="text"
+                                name="phone"
+                                label="Phone Number (Required)"
                                 onChange={handleChange}
                                 fullWidth
                                 required
-                                value={state.bid_increase_by}
+                                value={state.phone}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
                             <TextField
-                                type="number"
-                                name="player_per_team"
-                                label="Players per Team (Required)"
+                                type="text"
+                                name="delete_img_id"
+                                label="Delete Image ID (Optional)"
                                 onChange={handleChange}
                                 fullWidth
-                                required
-                                value={state.player_per_team}
+                                value={state.delete_img_id}
                             />
                         </Grid>
                         <Grid item xs={12} sx={{ textAlign: 'center' }}>
