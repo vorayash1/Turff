@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
 
     try {
-      const response = await axios.post("http://myallapps.tech:3024/api/admin/auth/login", { email, password });
+      const response = await axios.post("https://myallapps.tech:3024/api/admin/auth/login", { email, password });
       const user = response.data;
 
       if (user.data && user.data.admin.status === "active") {
