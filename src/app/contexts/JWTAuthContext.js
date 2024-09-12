@@ -51,13 +51,17 @@ export const AuthProvider = ({ children }) => {
   const login = async (email, password) => {
 
     try {
-      const response = await axios.post("http://myallapps.tech:3024/api/admin/auth/login", { email, password });
+      const response = await axios.post("https://myallapps.tech:3024/api/admin/auth/login", { email, password });
       const user = response.data;
+      console.log(user.data.admin, "user--------")
 
       if (user.data && user.data.admin.status === "active") {
         // Store token and user data in local storage
         localStorage.setItem('token', user.data.admin.token);
+        // localStorage.setItem('user', JSON.stringify(user.data.admin));
         localStorage.setItem('user', JSON.stringify(user.data.admin));
+        // Store user info after login
+
 
         // Dispatch login action
         dispatch({ type: "LOGIN", payload: { user: user.data.admin } });

@@ -42,7 +42,7 @@ const EditSimpleForm = () => {
 
     const fetchTuffData = async () => {
         try {
-            const response = await axios.get('http://myallapps.tech:3024/api/admin/tuff/detail', {
+            const response = await axios.get('https://myallapps.tech:3024/api/admin/tuff/detail', {
                 params: { tuff_id: tuffId }
             });
             const data = response.data;
@@ -102,7 +102,7 @@ const EditSimpleForm = () => {
         formData.append('data', JSON.stringify(payload));
 
         try {
-            const response = await axios.post('http://myallapps.tech:3024/api/admin/tuff/update', formData, {
+            const response = await axios.post('https://myallapps.tech:3024/api/admin/tuff/update', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data'
                 }

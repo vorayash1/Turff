@@ -11,7 +11,10 @@ import axios from 'axios';
 const SimpleForm = () => {
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState('');
-    const [imageFile, setImageFile] = useState(null);  // updated to match "image" field in API
+    const [imageFiles, setImageFiles] = useState([]);
+    const token = localStorage.getItem('token');
+    // console.log(token, "tokennnnnnnnnnnn")
+
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('user');
@@ -30,6 +33,8 @@ const SimpleForm = () => {
         phone: '',
         city: '',
         sport_type: '',
+        email: '',        // Added field for email
+        password: '',     // Added field for password
     });
 
     const navigate = useNavigate();
@@ -37,7 +42,8 @@ const SimpleForm = () => {
     const handleChange = (event) => {
         const { name, value, files } = event.target;
         if (name === 'image' && files.length > 0) {
-            setImageFile(files[0]);  // store the selected image
+            const selectedImages = Array.from(files).slice(0, 4);  // Limit to 4 images
+            setImageFiles(selectedImages);  // Store selected images
         } else {
             setState({ ...state, [name]: value });
         }
@@ -46,28 +52,31 @@ const SimpleForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         const formData = new FormData();
-        if (imageFile) {
-            formData.append('image', imageFile);  // append image to form data
-        }
+
+        // Append all selected images to formData
+        imageFiles.forEach((file, index) => {
+            formData.append(`image_${index}`, file);
+        });
 
         const payload = {
             ...state,
-            user_id: userData ? userData.id : null  // include user_id if available
+            user_id: userData ? userData.id : null  // Include user_id if available
         };
 
         formData.append('data', JSON.stringify(payload));
 
         try {
-            const response = await axios.post('http://myallapps.tech:3024/api/admin/tuff/create', formData, {
+            const response = await axios.post('https://myallapps.tech:3024/api/admin/tuff/create', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    'Content-Type': 'multipart/form-data',
+
                 }
             });
-            console.log('Auction created successfully:', response.data);
-            navigate('/auction/myturff');  // navigate on successful submission
+            console.log('Tuff created successfully:', response.data);
+            navigate('/auction/myturff');  // Navigate on successful submission
         } catch (error) {
-            console.error('Error adding auction:', error);
-            setError('Error adding auction. Please try again later.');
+            console.error('Error adding tuff:', error);
+            setError('Error adding tuff. Please try again later.');
         }
     };
 
@@ -81,8 +90,10 @@ const SimpleForm = () => {
             phone: '',
             city: '',
             sport_type: '',
+            email: '',        // Reset email
+            password: '',     // Reset password
         });
-        setImageFile(null);
+        setImageFiles([]);
     };
 
     const { settings, updateSettings } = useSettings();
@@ -127,16 +138,46 @@ const SimpleForm = () => {
                 </Typography>
                 <form onSubmit={handleSubmit}>
                     <Grid container spacing={3} style={{ paddingRight: "10px" }}>
+                        {/* Image Upload */}
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 type="file"
-                                name="image"  // updated field name for API
+                                name="image"
                                 label=""
                                 onChange={handleChange}
                                 fullWidth
                                 required
+                                inputProps={{ multiple: true }}  // Allow multiple files
                             />
                         </Grid>
+
+                        {/* Email Field */}
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                type="email"
+                                name="email"
+                                label="Email (Required)"
+                                onChange={handleChange}
+                                fullWidth
+                                required
+                                value={state.email}
+                            />
+                        </Grid>
+
+                        {/* Password Field */}
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                type="password"
+                                name="password"
+                                label="Password (Required)"
+                                onChange={handleChange}
+                                fullWidth
+                                required
+                                value={state.password}
+                            />
+                        </Grid>
+
+                        {/* Name Field */}
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 type="text"
@@ -149,6 +190,8 @@ const SimpleForm = () => {
                                 inputProps={{ pattern: "^[a-zA-Z0-9 ]{3,50}$" }}
                             />
                         </Grid>
+
+                        {/* Other Fields */}
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 type="text"
@@ -226,6 +269,8 @@ const SimpleForm = () => {
                                 value={state.sport_type}
                             />
                         </Grid>
+
+                        {/* Submit and Cancel buttons */}
                         <Grid item xs={12} sx={{ textAlign: 'center' }}>
                             <Button
                                 color="primary"
@@ -241,7 +286,7 @@ const SimpleForm = () => {
                         </Grid>
                     </Grid>
                 </form>
-            </div >
+            </div>
         </>
     );
 };
