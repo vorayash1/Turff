@@ -83,7 +83,7 @@ export default function MyAuction() {
                                 variant="contained"
                                 sx={{ textTransform: "capitalize" }}
                                 onClick={() => {
-                                    navigate("/dashboard/default");
+                                    navigate(-1);
                                     toast.info("Navigating back.");
                                 }}>
                                 Go Back

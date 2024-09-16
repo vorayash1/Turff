@@ -70,7 +70,9 @@ export default function JwtLogin() {
     setLoading(true);
     try {
       await login(values.email, values.password);
-      navigate("/dashboard/Analytics");
+      navigate("/");
+      //here
+      //is that isuue is from here??
     } catch (error) {
       console.error("Login failed:", error);
       setError("Login failed. Invalid Email Or Password."); // Set error message

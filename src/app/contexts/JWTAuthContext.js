@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useEffect, useReducer, useContext } from "react";
 import axios from "axios";
 // CUSTOM COMPONENT
 import { MatxLoading } from "app/components";
@@ -43,8 +43,10 @@ const AuthContext = createContext({
   logout: () => { },
   register: () => { }
 });
-
-export const AuthProvider = ({ children }) => {
+function useGlobalContext() {
+  return useContext(AuthContext);
+}
+const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const navigate = useNavigate(); // Initialize navigate for redirection
 
@@ -67,7 +69,7 @@ export const AuthProvider = ({ children }) => {
         dispatch({ type: "LOGIN", payload: { user: user.data.admin } });
 
         // Redirect to dashboard
-        navigate("/dashboard/default");
+        // navigate("/dashboard/default");
 
         return user; // Return response data if login is successful
       } else {
@@ -91,15 +93,31 @@ export const AuthProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    (async () => {
-      try {
-        const { data } = await axios.get("/api/auth/profile");
-        dispatch({ type: "INIT", payload: { isAuthenticated: true, user: data.user } });
-      } catch (err) {
-        console.error(err);
-        dispatch({ type: "INIT", payload: { isAuthenticated: false, user: null } });
-      }
-    })();
+    const userStorage = localStorage.getItem('user');
+    if (userStorage) {
+      const userData = JSON.parse(userStorage);
+      console.log('userData = ', userData);
+      dispatch({ type: "LOGIN", payload: { user: userData } });
+    }
+  }, [])
+
+  useEffect(() => {
+    // (async () => {
+    // try {
+    // const { data } = await axios.get("/api/auth/profile");
+    const userStorage = localStorage.getItem('user');
+    if (userStorage) {
+      const userData = JSON.parse(userStorage);
+      dispatch({ type: "INIT", payload: { isAuthenticated: true, user: userData } });
+    } else {
+      dispatch({ type: "INIT", payload: { isAuthenticated: false, user: null } });
+    }
+    // dispatch({ type: "INIT", payload: { isAuthenticated: true, user: data.user } });
+    // } catch (err) {
+    // console.error(err);
+
+    // }
+    // })();
   }, []);
 
   // SHOW LOADER
@@ -112,4 +130,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export default AuthContext; 
+// export default AuthContext;
+export { useGlobalContext, AuthProvider };

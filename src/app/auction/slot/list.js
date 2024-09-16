@@ -57,7 +57,7 @@ function TeamList() {
                                     {/* <a style={{ marginRight: "1vw" }} href="/auction/team" class="btn btn-sm btn-success mb-2">
                                         Buy More Teams
                                     </a> */}
-                                    <a href="/auction/myturff" class="btn btn-link">Back</a>
+                                    {/* <a href="/auction/myturff" class="btn btn-link">Back</a> */}
                                 </div>
                                 <div className="table-responsive">
                                     <table className="mat-elevation-z5 mdc-table">

@@ -1,15 +1,14 @@
 import { Fragment } from "react";
 import { Grid, styled } from "@mui/material";
-// import RowCards from "./shared/RowCards";
-import StatCards from "./shared/StatCards";
-// import Campaigns from "./shared/Campaigns";
-import StatCards2 from "./shared/StatCards2";
-// import DoughnutChart from "./shared/Doughnut";
-// import UpgradeCard from "./shared/UpgradeCard";
-import TopSellingTable from "./shared/TopSellingTable";
-import { useContext } from "react";
+import StatCards from "./shared/StatCards"; // Admin-specific component
+import StatCards2 from "./shared/StatCards2"; // Common or tuff_owner-specific component
+import TopSellingTable from "./shared/TopSellingTable"; // Admin-specific component
 import { Navigate } from "react-router-dom";
-import AuthContext from "app/contexts/JWTAuthContext";
+import { useGlobalContext } from "app/contexts/JWTAuthContext";
+import Layout1Sidenav from 'app/components/MatxLayout/Layout1/Layout1Sidenav';
+import SidenavTheme from "app/components/MatxTheme/SidenavTheme/SidenavTheme";
+import useSettings from "app/hooks/useSettings";
+import StatCards3 from "./shared/StatCards3";
 
 // STYLED COMPONENTS
 const ContentBox = styled("div")(({ theme }) => ({
@@ -17,65 +16,54 @@ const ContentBox = styled("div")(({ theme }) => ({
   [theme.breakpoints.down("sm")]: { margin: "16px" }
 }));
 
-// const Title = styled("span")(() => ({
-//   fontSize: "1rem",
-//   fontWeight: "500",
-//   marginRight: ".5rem",
-//   textTransform: "capitalize"
-// }));
-
-// const SubTitle = styled("span")(({ theme }) => ({
-//   fontSize: "0.875rem",
-//   color: theme.palette.text.secondary
-// }));
-
-// const H4 = styled("h4")(({ theme }) => ({
-//   fontSize: "1rem",
-//   fontWeight: "500",
-//   marginBottom: "16px",
-//   textTransform: "capitalize",
-//   color: theme.palette.text.secondary
-// }));
-
 export default function Analytics() {
-  // const { palette } = useTheme();
-  const { isAuthenticated } = useContext(AuthContext);
+  const state = useGlobalContext();
+  const { settings } = useSettings();
+  const { layout1Settings } = settings;
 
-  if (!isAuthenticated) {
-    // if (!isAuthenticated || user.role !== 'admin') {
-    // Redirect to home or show an unauthorized message
+  if (!state.isAuthenticated) {
     return <Navigate to="/unauthorized" />;
   }
 
+  const {
+    leftSidebar: { mode: sidenavMode, show: showSidenav }
+  } = layout1Settings;
+
+  // Determine user role
+  const role = state.user?.type;
+
   return (
     <Fragment>
-      <ContentBox className="analytics">
-        <Grid container spacing={3}>
-          <Grid item lg={12} md={12} sm={12} xs={12}>
-            <StatCards />
-            <TopSellingTable />
-            <StatCards2 />
+      <div className="container1">
+        {showSidenav && sidenavMode !== "close" && (
+          <SidenavTheme>
+            <Layout1Sidenav />
+          </SidenavTheme>
+        )}
+      </div>
+      <div className="container2sub" style={{ float: "right" }}>
+        <ContentBox className="analytics">
+          <Grid container spacing={3}>
+            <Grid item lg={12} md={12} sm={12} xs={12}>
+              {/* Admin view */}
+              {role === "admin" && (
+                <>
+                  <StatCards />
+                  <TopSellingTable />
+                  <StatCards2 />
+                </>
+              )}
 
-            {/* <H4>Ongoing Projects</H4>
-            <RowCards /> */}
+              {/* Tuff Owner view */}
+              {role === "tuff_owner" && (
+                <>
+                  <StatCards3 />
+                </>
+              )}
+            </Grid>
           </Grid>
-
-          {/* <Grid item lg={4} md={4} sm={12} xs={12}> */}
-          {/* <Card sx={{ px: 3, py: 2, mb: 3 }}>
-              <Title>Traffic Sources</Title>
-              <SubTitle>Last 30 days</SubTitle>
-
-              <DoughnutChart
-                height="300px"
-                color={[palette.primary.dark, palette.primary.main, palette.primary.light]}
-              />
-            </Card> */}
-
-          {/* <UpgradeCard /> */}
-          {/* <Campaigns /> */}
-          {/* </Grid> */}
-        </Grid>
-      </ContentBox>
+        </ContentBox>
+      </div>
     </Fragment>
   );
 }

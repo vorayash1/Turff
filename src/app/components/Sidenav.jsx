@@ -4,7 +4,9 @@ import Scrollbar from "react-perfect-scrollbar";
 
 import { MatxVerticalNav } from "app/components";
 import useSettings from "app/hooks/useSettings";
-import { navigations } from "app/navigations";
+import { navigations, tuffNavigations } from "app/navigations";
+
+import { useGlobalContext } from "app/contexts/JWTAuthContext";
 
 // STYLED COMPONENTS
 const StyledScrollBar = styled(Scrollbar)(() => ({
@@ -28,6 +30,10 @@ const SideNavMobile = styled("div")(({ theme }) => ({
 export default function Sidenav({ children }) {
   const { settings, updateSettings } = useSettings();
 
+  const state = useGlobalContext();
+  console.log(state)
+  const role = (state.user == null) ? "" : state.user.type;
+
   const updateSidebarMode = (sidebarSettings) => {
     let activeLayoutSettingsName = settings.activeLayout + "Settings";
     let activeLayoutSettings = settings[activeLayoutSettingsName];
@@ -43,12 +49,13 @@ export default function Sidenav({ children }) {
       }
     });
   };
-
+  // {role === "admin" ? adminContent : role === "tuff_owner" ? stuffContent : content}
   return (
     <Fragment>
       <StyledScrollBar options={{ suppressScrollX: true }}>
         {children}
-        <MatxVerticalNav items={navigations} />
+        {/* <MatxVerticalNav items={navigations} /> */}
+        <MatxVerticalNav items={role === "admin" ? navigations : role === "tuff_owner" ? tuffNavigations : []} />
       </StyledScrollBar>
 
       <SideNavMobile onClick={() => updateSidebarMode({ mode: "close" })} />

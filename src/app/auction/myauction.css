@@ -202,7 +202,7 @@ label {
   background-color: transparent;
   border-collapse: collapse;
   border-spacing: 0;
-  display: inline-block;
+  /* display: inline-block; */
   overflow-x: auto;
   margin: 8px 0 32px;
   border: 1px solid rgba(0, 0, 0, 0.1);

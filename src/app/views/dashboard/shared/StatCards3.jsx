@@ -42,7 +42,7 @@ const IconBox = styled("div")(() => ({
   "& .icon": { fontSize: "14px" }
 }));
 
-export default function StatCards2() {
+export default function StatCards3() {
   const { palette } = useTheme();
   const bgError = lighten(palette.error.main, 0.85);
 
@@ -52,20 +52,46 @@ export default function StatCards2() {
         <Card elevation={3} sx={{ p: 2 }}>
           <ContentBox>
             <FabIcon size="medium" sx={{ background: "rgba(9, 182, 109, 0.15)" }}>
-              <TrendingUp color="success" />
+              {/* <TrendingUp color="success" /> */}
+              <ExpandLess color="success" />
             </FabIcon>
-            <H3 color="#08ad6c">Total User</H3>
+            <H3 color="#08ad6c">Total Pitch</H3>
           </ContentBox>
           <ContentBox sx={{ p: 2 }}>
-            <H1>1345</H1>
-            <IconBox sx={{ backgroundColor: "success.main" }}>
-              <ExpandLess className="icon" />
-            </IconBox>
-            <Span color="#08ad6c">(+21%)</Span>
+            <H1>2</H1>
           </ContentBox>
         </Card>
       </Grid>
       <Grid item xs={12} md={6}>
+        <Card elevation={3} sx={{ p: 2 }}>
+          <ContentBox>
+            <FabIcon size="medium" sx={{ background: "rgba(9, 182, 109, 0.15)" }}>
+              {/* <ExpandLess color="success" /> */}
+              <TrendingUp color="success" />
+            </FabIcon>
+            <H3 color="#08ad6c">Total Booking</H3>
+          </ContentBox>
+          <ContentBox sx={{ p: 2 }}>
+            <H1>18</H1>
+          </ContentBox>
+        </Card>
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <Card elevation={3} sx={{ p: 2 }}>
+          <ContentBox>
+            <FabIcon size="medium" sx={{ background: "rgba(9, 182, 109, 0.15)" }}>
+              {/* <TrendingUp color="success" /> */}
+              <StarOutline color="error" />
+
+            </FabIcon>
+            <H3 color="#08ad6c">Total Revenue</H3>
+          </ContentBox>
+          <ContentBox sx={{ p: 2 }}>
+            <H1>9000</H1>
+          </ContentBox>
+        </Card>
+      </Grid>
+      {/* <Grid item xs={12} md={6}>
         <Card elevation={3} sx={{ p: 2 }}>
           <ContentBox>
             <FabIcon size="medium" sx={{ backgroundColor: bgError, overflow: "hidden" }}>
@@ -81,7 +107,7 @@ export default function StatCards2() {
             <Span color="error.main">(+11%)</Span>
           </ContentBox>
         </Card>
-      </Grid>
+      </Grid> */}
     </Grid>
   );
 }

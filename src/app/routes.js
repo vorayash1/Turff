@@ -22,6 +22,7 @@ const AppEchart = Loadable(lazy(() => import("app/views/charts/echarts/AppEchart
 const Analytics = Loadable(lazy(() => import("app/views/dashboard/Analytics")));
 //My Auctiion
 const MyAuction = Loadable(lazy(() => import("app/auction/myturff")));
+const Myturff = Loadable(lazy(() => import("app/auction/turff")));
 // const JwtLogin1 = Loadable(lazy(() => import("app/auction/signIn")));
 // const JwtRegister1 = Loadable(lazy(() => import("app/auction/signUp")));
 const SimpleForm = Loadable(lazy(() => import("app/auction/addturf")));
@@ -61,6 +62,7 @@ const routes = [
   { path: "/auction/slot/addslot", element: <CreateTeam /> },
   { path: "/auction/booking/list", element: <PlayerList /> },
   { path: "/auction/myturff", element: <MyAuction /> },
+  { path: "/auction/turff", element: <Myturff /> },
   { path: "/auction/profile", element: <Profile /> },
   { path: "/auction/addturf", element: <SimpleForm /> },
   // { path: "/auction/booking/addplayer/:uniqueCode", element: <AddPlayerPage /> },
