@@ -8,7 +8,7 @@ const Analytics = Loadable(lazy(() => import("app/views/dashboard/Analytics")));
 
 
 const routes = [
-    { path: "/session/signin", element: <AdminPage /> },
+    { path: "/", element: <AdminPage /> },
     { path: "/session/signin", element: <JwtLogin /> },
     { path: "/dashboard/Analytics", element: <Analytics /> },
 
