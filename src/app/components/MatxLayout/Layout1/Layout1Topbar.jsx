@@ -111,7 +111,7 @@ const Layout1Topbar = () => {
 
   return (
     <TopbarRoot>
-      <TopbarContainer>
+      <TopbarContainer style={{ background: 'none' }}>
         <Box display="flex">
           {/* <StyledIconButton onClick={handleSidebarToggle}>
             <Menu />

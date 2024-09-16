@@ -14,6 +14,7 @@ import SettingsProvider from "app/contexts/SettingsContext";
 // import adminRoutes from "../routes_for_admin";
 // import stuffRoutes from "../routes_for_stuff";
 import MainPage from "routes_for_mainPage";
+import Footer from "../app/components/Footer";
 
 export default function App() {
   // const content = useRoutes(routes);
@@ -30,11 +31,12 @@ export default function App() {
 
     <SettingsProvider>
       <AuthProvider>
-        <MainPage />
-        {/* <MatxTheme> */}
-        {/* <CssBaseline /> */}
-        {/* {role === "admin" ? adminContent : role === "stuff" ? stuffContent : content} */}
-        {/* </MatxTheme> */}
+        <MatxTheme>
+
+          <MainPage />
+          {/* <Footer /> */}
+          {/* {content} */}
+        </MatxTheme>
 
       </AuthProvider>
     </SettingsProvider>

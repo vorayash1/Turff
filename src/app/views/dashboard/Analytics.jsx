@@ -9,6 +9,9 @@ import Layout1Sidenav from 'app/components/MatxLayout/Layout1/Layout1Sidenav';
 import SidenavTheme from "app/components/MatxTheme/SidenavTheme/SidenavTheme";
 import useSettings from "app/hooks/useSettings";
 import StatCards3 from "./shared/StatCards3";
+import Footer from "../../components/Footer";
+import Layout1Topbar from "app/components/MatxLayout/Layout1/Layout1Topbar";
+
 
 // STYLED COMPONENTS
 const ContentBox = styled("div")(({ theme }) => ({
@@ -34,6 +37,9 @@ export default function Analytics() {
 
   return (
     <Fragment>
+      {/* <Layout1Topbar/> */}
+      <Layout1Topbar />
+
       <div className="container1">
         {showSidenav && sidenavMode !== "close" && (
           <SidenavTheme>
@@ -51,6 +57,7 @@ export default function Analytics() {
                   <StatCards />
                   <TopSellingTable />
                   <StatCards2 />
+                  {/* <Footer /> */}
                 </>
               )}
 
@@ -58,12 +65,15 @@ export default function Analytics() {
               {role === "tuff_owner" && (
                 <>
                   <StatCards3 />
+                  <TopSellingTable />
+
                 </>
               )}
             </Grid>
           </Grid>
         </ContentBox>
       </div>
+      <Footer />
     </Fragment>
   );
 }

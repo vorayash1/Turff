@@ -8,6 +8,7 @@ const Layout1Settings = {
   topbar: {
     show: true,
     fixed: true,
+    mode: "full", // full, close, compact, mobile,
     theme: "whiteBlue" // View all valid theme colors inside MatxTheme/themeColors.js
   }
 };
