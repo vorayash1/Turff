@@ -2,7 +2,7 @@ import { lazy } from "react";
 import Loadable from "./components/Loadable";
 
 // const StuffPage = Loadable(lazy(() => import("app/auction/turff")));
-const StuffPage = Loadable(lazy(() => import("app/views/dashboard/Analytics.jsx")));
+const StuffPage = Loadable(lazy(() => import("app/views/sessions/JwtLogin")));
 // const JwtRegister = Loadable(lazy(() => import("app/views/sessions/JwtRegister")));
 const JwtLogin = Loadable(lazy(() => import("app/views/sessions/JwtLogin")));
 const PlayerList = Loadable(lazy(() => import("./auction/booking/list")));
@@ -14,6 +14,7 @@ const TeamList = Loadable(lazy(() => import("./auction/slot/list")));
 
 const routes = [
     { path: "/", element: <StuffPage /> },
+    // { path: "/", element: <StuffPage /> },
     // { path: "/session/signup", element: <JwtRegister /> },
     { path: "/session/signin", element: <JwtLogin /> },
     { path: "/auction/booking/list", element: <PlayerList /> },

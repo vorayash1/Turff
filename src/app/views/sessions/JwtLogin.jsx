@@ -70,7 +70,7 @@ export default function JwtLogin() {
     setLoading(true);
     try {
       await login(values.email, values.password);
-      navigate("/");
+      navigate("/dashboard/analytics");
       //here
       //is that isuue is from here??
     } catch (error) {
