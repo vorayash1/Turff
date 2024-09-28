@@ -15,10 +15,14 @@ function TeamList() {
     const theme = useTheme();
     const navigate = useNavigate();
 
-    const [timeData, setTimeData] = useState([]); // State to hold the fetched time data
-    const [error, setError] = useState(''); // State to handle errors
-    const [selectedDay, setSelectedDay] = useState(0); // State to handle the selected day (0-6)
-    const [priceUpdates, setPriceUpdates] = useState({}); // State to hold price updates
+    const [timeData, setTimeData] = useState([]);
+    const [error, setError] = useState('');
+    const [selectedDay, setSelectedDay] = useState(0);
+    const [priceUpdates, setPriceUpdates] = useState({});
+
+    const [currentPage, setCurrentPage] = useState(1); // Current page
+    const [totalPages, setTotalPages] = useState(3); // Total pages
+    const [limit] = useState(10); // Items per page
 
     const {
         leftSidebar: { mode: sidenavMode, show: showSidenav }
@@ -41,9 +45,13 @@ function TeamList() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isMdScreen]);
 
+    useEffect(() => {
+        fetchSlots(); // Fetch slots when currentPage changes
+    }, [currentPage]);
+
     const fetchSlots = async () => {
-        const token = localStorage.getItem('token'); // Retrieve token from localStorage
-        const user = JSON.parse(localStorage.getItem('user')); // Retrieve and parse user from localStorage
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user'));
 
         if (!user || !user._id) {
             setError("User not found. Please log in again.");
@@ -53,16 +61,21 @@ function TeamList() {
         try {
             const response = await axios.post(
                 'https://myallapps.tech:3024/api/admin/time/getTime',
-                { tuff_id: user._id }, // Send tuff_id in the request body
+                {
+                    tuff_id: user._id,
+                    page: currentPage,
+                    limit: limit
+                },
                 {
                     headers: {
-                        "Authorization": `Bearer ${token}`, // Send the token in the header
+                        "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json"
                     }
                 }
             );
 
-            setTimeData(response.data.data.timeData || []); // Update the state with the fetched time data
+            setTimeData(response.data.data.timeData || []);
+            // setTotalPages((response.data.data.totalCount));
         } catch (error) {
             console.error("Error fetching time data:", error);
             setError("Failed to fetch time data. Please try again later.");
@@ -74,7 +87,7 @@ function TeamList() {
     };
 
     const handlePriceChange = (timeId, value) => {
-        setPriceUpdates(prev => ({ ...prev, [timeId]: value })); // Update the price for the specific timeId
+        setPriceUpdates(prev => ({ ...prev, [timeId]: value }));
     };
 
     const updatePrices = async () => {
@@ -84,9 +97,9 @@ function TeamList() {
         const updateData = {
             tuff_id: user._id,
             data: timeData.map(slot => ({
-                time_id: slot._id, // Use the correct field name for the slot id
-                price: priceUpdates[slot._id] || slot.price, // Use the updated price or the current price
-                status: slot.status // Keep the current status
+                time_id: slot._id,
+                price: priceUpdates[slot._id] || slot.price,
+                status: slot.status
             }))
         };
 
@@ -102,7 +115,6 @@ function TeamList() {
                 }
             );
 
-            // Optionally refetch slots to reflect changes
             fetchSlots();
             alert("Prices updated successfully!");
         } catch (error) {
@@ -111,8 +123,19 @@ function TeamList() {
         }
     };
 
-    // Filter the slots based on the selected day
     const filteredSlots = timeData.filter(slot => slot.day === selectedDay);
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prev => prev + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prev => prev - 1);
+        }
+    };
 
     return (
         <>
@@ -149,9 +172,6 @@ function TeamList() {
                                             <MenuItem value={6}>Saturday</MenuItem>
                                         </Select>
                                     </FormControl>
-                                    {/* <Button onClick={() => navigate("/auction/slot/addslot")} className="btn btn-sm btn-success mb-2">
-                                        Update Slot
-                                    </Button> */}
                                     <Button onClick={updatePrices} className="btn btn-sm btn-success mb-2">
                                         Update Prices
                                     </Button>
@@ -201,6 +221,11 @@ function TeamList() {
                                         )}
                                     </tbody>
                                 </table>
+                            </div>
+                            <div className="pagination-controls">
+                                <Button onClick={handlePreviousPage} disabled={currentPage === 1}>Previous</Button>
+                                <span>{` Page ${currentPage} of ${totalPages} `}</span>
+                                <Button onClick={handleNextPage} disabled={currentPage === totalPages}>Next</Button>
                             </div>
                         </article>
                     </main>
