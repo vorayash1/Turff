@@ -26,11 +26,6 @@ const H1 = styled("h1")(({ theme }) => ({
   color: theme.palette.text.secondary
 }));
 
-const Span = styled("span")(() => ({
-  fontSize: "13px",
-  marginLeft: "4px"
-}));
-
 const IconBox = styled("div")(() => ({
   width: 16,
   height: 16,
@@ -42,9 +37,13 @@ const IconBox = styled("div")(() => ({
   "& .icon": { fontSize: "14px" }
 }));
 
-export default function StatCards2() {
+export default function StatCards2({ dashBoardData = {} }) {
   const { palette } = useTheme();
   const bgError = lighten(palette.error.main, 0.85);
+
+  // Use optional chaining and default values
+  const totalUser = dashBoardData?.user || 0;
+  const totalCity = dashBoardData?.city || 0;
 
   return (
     <Grid container spacing={3} sx={{ mb: 3 }}>
@@ -57,28 +56,27 @@ export default function StatCards2() {
             <H3 color="#08ad6c">Total User</H3>
           </ContentBox>
           <ContentBox sx={{ p: 2 }}>
-            <H1>1345</H1>
-            <IconBox sx={{ backgroundColor: "success.main" }}>
+            <H1>{totalUser}</H1> {/* Show default value */}
+            {/* <IconBox sx={{ backgroundColor: "success.main" }}>
               <ExpandLess className="icon" />
-            </IconBox>
-            <Span color="#08ad6c">(+21%)</Span>
+            </IconBox> */}
           </ContentBox>
         </Card>
       </Grid>
+
       <Grid item xs={12} md={6}>
         <Card elevation={3} sx={{ p: 2 }}>
           <ContentBox>
             <FabIcon size="medium" sx={{ backgroundColor: bgError, overflow: "hidden" }}>
               <StarOutline color="error" />
             </FabIcon>
-            <H3 color="error.main" fontSize="10px">Total City </H3>
+            <H3 color="error.main" fontSize="10px">Total City</H3>
           </ContentBox>
           <ContentBox sx={{ p: 2 }}>
-            <H1>200</H1>
-            <IconBox sx={{ backgroundColor: "success.main" }}>
+            <H1>{totalCity}</H1> {/* Show default value */}
+            {/* <IconBox sx={{ backgroundColor: "success.main" }}>
               <ExpandLess className="icon" />
-            </IconBox>
-            <Span color="error.main">(+11%)</Span>
+            </IconBox> */}
           </ContentBox>
         </Card>
       </Grid>

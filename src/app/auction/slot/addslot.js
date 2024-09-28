@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Button, Grid, TextField, Typography, Checkbox, FormControlLabel, MenuItem, Select, InputLabel, FormControl } from '@mui/material';
+import { Button, Grid, TextField, Typography, Checkbox, FormControlLabel, MenuItem, Select, InputLabel, FormControl, Box } from '@mui/material';
 import axios from 'axios';
 import SidenavTheme from "app/components/MatxTheme/SidenavTheme/SidenavTheme";
 import Layout1Sidenav from 'app/components/MatxLayout/Layout1/Layout1Sidenav';
@@ -57,88 +57,84 @@ const CreateTeam = () => {
 
     return (
         <>
-            <div className="container1">
+            <Box sx={{ display: 'flex' }}>
                 {showSidenav && sidenavMode !== "close" && (
                     <SidenavTheme>
                         <Layout1Sidenav />
                     </SidenavTheme>
                 )}
-            </div>
-            <div className="container2sub" style={{ float: "right" }}>
-                <Typography variant="h4" align="center" gutterBottom>
-                    Add Turf Booking Slots
-                </Typography>
-                {error && <Typography color="error">{error}</Typography>}
-                <form onSubmit={handleSubmit} style={{ maxWidth: '600px', margin: 'auto' }}>
-                    <FormControl fullWidth sx={{ mb: 3 }}>
-                        <InputLabel>Select Day</InputLabel>
-                        <Select
-                            value={selectedDay}
-                            onChange={(e) => setSelectedDay(e.target.value)}
-                            label="Select Day"
-                        >
-                            <MenuItem value="default">Default</MenuItem>
-                            {daysOfWeek.map((day) => (
-                                <MenuItem key={day} value={day}>{day}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                <Box sx={{ flexGrow: 1, p: 3, maxWidth: '700px', mx: 'auto' }}>
+                    <Typography variant="h4" align="center" gutterBottom>
+                        Add Turf Booking Slots
+                    </Typography>
+                    {error && <Typography color="error">{error}</Typography>}
+                    <form onSubmit={handleSubmit}>
+                        <FormControl fullWidth sx={{ mb: 3 }}>
+                            <InputLabel>Select Day</InputLabel>
+                            <Select
+                                value={selectedDay}
+                                onChange={(e) => setSelectedDay(e.target.value)}
+                                label="Select Day"
+                            >
+                                <MenuItem value="default">Default</MenuItem>
+                                {daysOfWeek.map((day) => (
+                                    <MenuItem key={day} value={day}>{day}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
 
-                    {selectedDay !== 'default' && (
-                        <div>
-                            <Typography variant="h6" gutterBottom>{selectedDay}</Typography>
-                            {hoursOfDay.map((hour, hourIndex) => (
-                                <Grid container spacing={2} key={hourIndex} alignItems="center">
-                                    <Grid item xs={4}>
-                                        <Typography>{hour}</Typography>
+                        {selectedDay !== 'default' && (
+                            <>
+                                <Typography variant="h6" gutterBottom>{selectedDay}</Typography>
+                                {hoursOfDay.map((hour, hourIndex) => (
+                                    <Grid container spacing={2} key={hourIndex} alignItems="center" sx={{ mb: 2 }}>
+                                        <Grid item xs={4}>
+                                            <Typography variant="body1">{hour}</Typography>
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <TextField
+                                                type="number"
+                                                name="price"
+                                                label="Price (₹)"
+                                                onChange={(e) => handleChange(selectedDay, hourIndex, e)}
+                                                fullWidth
+                                                value={slots[selectedDay]?.[hourIndex]?.price || ''}
+                                                inputProps={{ min: 0 }}
+                                                size="small"
+                                            />
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={slots[selectedDay]?.[hourIndex]?.visible ?? true}
+                                                        onChange={(e) => handleChange(selectedDay, hourIndex, e)}
+                                                        name="visible"
+                                                    />
+                                                }
+                                                label="Visible"
+                                            />
+                                        </Grid>
                                     </Grid>
-                                    <Grid item xs={4}>
-                                        <TextField
-                                            type="number"
-                                            name="price"
-                                            label="Price (₹)"
-                                            onChange={(e) => handleChange(selectedDay, hourIndex, e)}
-                                            fullWidth
-                                            value={slots[selectedDay]?.[hourIndex]?.price || ''}
-                                            inputProps={{ min: 0 }}
-                                        />
-                                    </Grid>
-                                    <Grid item xs={4}>
-                                        <FormControlLabel
-                                            control={
-                                                <Checkbox
-                                                    checked={slots[selectedDay]?.[hourIndex]?.visible ?? true}
-                                                    onChange={(e) => handleChange(selectedDay, hourIndex, e)}
-                                                    name="visible"
-                                                />
-                                            }
-                                            label="Visible"
-                                        />
-                                    </Grid>
-                                </Grid>
-                            ))}
-                        </div>
-                    )}
+                                ))}
+                            </>
+                        )}
 
-                    <Grid container justifyContent="center" sx={{ marginTop: 3 }}>
-                        <Button
-                            color="primary"
-                            variant="contained"
-                            type="submit"
-                            sx={{ marginRight: 2 }}
-                        >
-                            Save Slots
-                        </Button>
-                        <Button
-                            color="secondary"
-                            variant="contained"
-                            onClick={() => setSlots({})}
-                        >
-                            Reset
-                        </Button>
-                    </Grid>
-                </form>
-            </div>
+                        <Grid container justifyContent="center" spacing={2} sx={{ marginTop: 3 }}>
+                            <Grid item>
+                                <Button color="primary" variant="contained" type="submit">
+                                    Save Slots
+                                </Button>
+                            </Grid>
+                            <Grid item>
+                                <Button color="secondary" variant="outlined" onClick={() => setSlots({})}>
+                                    Reset
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </form>
+                </Box>
+            </Box>
         </>
     );
 };

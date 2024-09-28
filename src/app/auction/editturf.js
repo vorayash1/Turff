@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom'; // Import useParams
 import { Button, Grid, TextField, Typography } from '@mui/material';
 import useSettings from "app/hooks/useSettings";
 import { useMediaQuery, useTheme } from "@mui/material";
@@ -11,20 +11,22 @@ import axios from 'axios';
 
 const EditSimpleForm = () => {
     const [state, setState] = useState({
-        tuff_id: '', // Adding tuff_id for update
         name: '',
+        city: '',
         address: '',
         lat: '',
         lng: '',
         ccode: '',
         phone: '',
         image: null,
-        delete_img_id: '', // Adding delete_img_id field
+        delete_img_id: '',
     });
 
     const [logoUrl, setLogoUrl] = useState('');
     const [selectedFileName, setSelectedFileName] = useState('');
+    const { id } = useParams(); // Get the dynamic id from the URL
     const navigate = useNavigate();
+    const [userData, setUserData] = useState(null);
 
     const storedUserData = localStorage.getItem('user');
     let userId = null;
@@ -33,29 +35,29 @@ const EditSimpleForm = () => {
         userId = userData.id;
     }
 
-    const storedTuffData = localStorage.getItem('tuffData');
-    let tuffId = null;
-    if (storedTuffData) {
-        const tuffData = JSON.parse(storedTuffData);
-        tuffId = tuffData.id;
-    }
+    useEffect(() => {
+        const storedUserData = localStorage.getItem('user');
+        if (storedUserData) {
+            setUserData(JSON.parse(storedUserData));
+        }
+    }, []);
 
     const fetchTuffData = async () => {
         try {
             const response = await axios.get('https://myallapps.tech:3024/api/admin/tuff/detail', {
-                params: { tuff_id: tuffId }
+                params: { tuff_id: id } // Use the dynamic id from useParams
             });
             const data = response.data;
 
             setState({
-                tuff_id: tuffId,
                 name: data.name || '',
+                city: data.city || '',
                 address: data.address || '',
                 lat: data.lat || '',
                 lng: data.lng || '',
                 ccode: data.ccode || '',
                 phone: data.phone || '',
-                delete_img_id: '', // Reset on fetch
+                delete_img_id: '',
             });
             setLogoUrl(data.image_url || '');
         } catch (error) {
@@ -64,10 +66,10 @@ const EditSimpleForm = () => {
     };
 
     useEffect(() => {
-        if (tuffId) {
-            fetchTuffData();
+        if (id) {
+            fetchTuffData(); // Fetch the turf data when the component mounts
         }
-    }, [tuffId]);
+    }, [id]);
 
     const handleChange = (event) => {
         const { name, value, files } = event.target;
@@ -82,15 +84,16 @@ const EditSimpleForm = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const { tuff_id, name, address, lat, lng, image, ccode, phone, delete_img_id } = state;
+        const { name, city, address, lat, lng, image, ccode, phone, delete_img_id } = state;
         const formData = new FormData();
         if (image) {
             formData.append('image', image, image.name);
         }
 
         const payload = {
-            tuff_id,
+            tuff_id: id, // Send the dynamic tuff_id
             name,
+            city,
             address,
             lat,
             lng,
@@ -104,7 +107,7 @@ const EditSimpleForm = () => {
         try {
             const response = await axios.post('https://myallapps.tech:3024/api/admin/tuff/update', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data'
+                    "Authorization": `Bearer ${userData.token}`,
                 }
             });
 
@@ -122,17 +125,15 @@ const EditSimpleForm = () => {
     };
 
     const handleCancel = () => {
-        fetchTuffData();
         navigate(-1);
     };
 
     const { settings, updateSettings } = useSettings();
-    const { layout1Settings } = settings;
     const theme = useTheme();
 
     const {
         leftSidebar: { mode: sidenavMode, show: showSidenav }
-    } = layout1Settings;
+    } = settings.layout1Settings;
     const isMdScreen = useMediaQuery(theme.breakpoints.down("md"));
 
     useEffect(() => {
@@ -202,6 +203,17 @@ const EditSimpleForm = () => {
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 type="text"
+                                name="city"
+                                label="City (Required)"
+                                onChange={handleChange}
+                                fullWidth
+                                required
+                                value={state.city}
+                            />
+                        </Grid>
+                        <Grid item xs={12} sm={6}>
+                            <TextField
+                                type="text"
                                 name="address"
                                 label="Address (Required)"
                                 onChange={handleChange}
@@ -252,16 +264,6 @@ const EditSimpleForm = () => {
                                 fullWidth
                                 required
                                 value={state.phone}
-                            />
-                        </Grid>
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                type="text"
-                                name="delete_img_id"
-                                label="Delete Image ID (Optional)"
-                                onChange={handleChange}
-                                fullWidth
-                                value={state.delete_img_id}
                             />
                         </Grid>
                         <Grid item xs={12} sx={{ textAlign: 'center' }}>

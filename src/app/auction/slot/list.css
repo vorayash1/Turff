@@ -132,6 +132,17 @@ a {
   color: #0d6efd;
   text-decoration: underline;
 }
+.mdc-table {
+  width: 100%;
+  table-layout: fixed; /* Ensure that the columns are of equal width */
+}
+
+.mdc-table th,
+.mdc-table td {
+  width: 25%; /* Adjust this percentage based on the number of columns */
+  text-align: left; /* Optional: align text to the left */
+}
+
 .mat-accordion .mat-expansion-panel.mat-expansion-panel--expanded:last-child {
   margin-bottom: 0;
 }

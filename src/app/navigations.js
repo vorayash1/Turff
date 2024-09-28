@@ -1,7 +1,7 @@
 export const navigations = [
   { name: "Dashboard", path: "/dashboard/Analytics", icon: "dashboard" },
-  { name: "My Turff", path: "/auction/myturff", icon: "account_balance" },
-
+  { name: "All Turff", path: "/auction/myturff", icon: "account_balance" },
+  { name: "All Booking List", path: "/auction/booking/list", icon: "account_balance" },
 ];
 
 export const tuffNavigations = [

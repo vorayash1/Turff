@@ -13,8 +13,6 @@ const SimpleForm = () => {
     const [error, setError] = useState('');
     const [imageFiles, setImageFiles] = useState([]);
     const token = localStorage.getItem('token');
-    // console.log(token, "tokennnnnnnnnnnn")
-
 
     useEffect(() => {
         const storedUserData = localStorage.getItem('user');
@@ -23,7 +21,6 @@ const SimpleForm = () => {
         }
     }, []);
 
-    // Updated state with required fields
     const [state, setState] = useState({
         name: '',
         address: '',
@@ -33,15 +30,16 @@ const SimpleForm = () => {
         phone: '',
         city: '',
         sport_type: '',
-        email: '',        // Added field for email
-        password: '',     // Added field for password
+        email: '',
+        password: '',
     });
 
+    const [formErrors, setFormErrors] = useState({});
     const navigate = useNavigate();
 
     const handleChange = (event) => {
         const { name, value, files } = event.target;
-        if (name === 'image' && files.length > 0) {
+        if (name.startsWith('image_') && files.length > 0) {
             const selectedImages = Array.from(files).slice(0, 4);  // Limit to 4 images
             setImageFiles(selectedImages);  // Store selected images
         } else {
@@ -53,27 +51,25 @@ const SimpleForm = () => {
         e.preventDefault();
         const formData = new FormData();
 
-        // Append all selected images to formData
+        // Append each key-value pair from the state to formData
+        Object.keys(state).forEach(key => {
+            formData.append(key, state[key]);
+        });
+
+        // Append images if any are selected
         imageFiles.forEach((file, index) => {
             formData.append(`image_${index}`, file);
         });
 
-        const payload = {
-            ...state,
-            user_id: userData ? userData.id : null  // Include user_id if available
-        };
-
-        formData.append('data', JSON.stringify(payload));
-
         try {
             const response = await axios.post('https://myallapps.tech:3024/api/admin/tuff/create', formData, {
                 headers: {
-                    'Content-Type': 'multipart/form-data',
-
+                    "Authorization": `Bearer ${userData.token}`,
+                    "Content-Type": "multipart/form-data",
                 }
             });
             console.log('Tuff created successfully:', response.data);
-            navigate('/auction/myturff');  // Navigate on successful submission
+            navigate('/auction/myturff');
         } catch (error) {
             console.error('Error adding tuff:', error);
             setError('Error adding tuff. Please try again later.');
@@ -90,8 +86,8 @@ const SimpleForm = () => {
             phone: '',
             city: '',
             sport_type: '',
-            email: '',        // Reset email
-            password: '',     // Reset password
+            email: '',
+            password: '',
         });
         setImageFiles([]);
     };
@@ -139,17 +135,18 @@ const SimpleForm = () => {
                 <form onSubmit={handleSubmit}>
                     <Grid container spacing={3} style={{ paddingRight: "10px" }}>
                         {/* Image Upload */}
-                        <Grid item xs={12} sm={6}>
-                            <TextField
-                                type="file"
-                                name="image"
-                                label=""
-                                onChange={handleChange}
-                                fullWidth
-                                required
-                                inputProps={{ multiple: true }}  // Allow multiple files
-                            />
-                        </Grid>
+                        {Array.from({ length: 4 }).map((_, index) => (
+                            <Grid item xs={12} sm={6} key={index}>
+                                <TextField
+                                    type="file"
+                                    name={`image_${index}`}  // Ensure name matches expected Multer field
+                                    // label={`Upload Image ${index + 1}`}
+                                    onChange={handleChange}
+                                    fullWidth
+                                    inputProps={{ accept: "image/*" }}  // Limit to image files
+                                />
+                            </Grid>
+                        ))}
 
                         {/* Email Field */}
                         <Grid item xs={12} sm={6}>
@@ -161,6 +158,8 @@ const SimpleForm = () => {
                                 fullWidth
                                 required
                                 value={state.email}
+                                error={!!formErrors.email}
+                                helperText={formErrors.email}
                             />
                         </Grid>
 
@@ -174,6 +173,8 @@ const SimpleForm = () => {
                                 fullWidth
                                 required
                                 value={state.password}
+                                error={!!formErrors.password}
+                                helperText={formErrors.password}
                             />
                         </Grid>
 
@@ -188,10 +189,13 @@ const SimpleForm = () => {
                                 required
                                 value={state.name}
                                 inputProps={{ pattern: "^[a-zA-Z0-9 ]{3,50}$" }}
+                                error={!!formErrors.name}
+                                helperText={formErrors.name}
                             />
                         </Grid>
 
                         {/* Other Fields */}
+                        {/* Similar fields for address, lat, lng, etc. */}
                         <Grid item xs={12} sm={6}>
                             <TextField
                                 type="text"
@@ -203,7 +207,7 @@ const SimpleForm = () => {
                                 value={state.address}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={3}>
                             <TextField
                                 type="text"
                                 name="lat"
@@ -214,7 +218,7 @@ const SimpleForm = () => {
                                 value={state.lat}
                             />
                         </Grid>
-                        <Grid item xs={12} sm={6}>
+                        <Grid item xs={12} sm={3}>
                             <TextField
                                 type="text"
                                 name="lng"

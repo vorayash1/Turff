@@ -42,9 +42,15 @@ const IconBox = styled("div")(() => ({
   "& .icon": { fontSize: "14px" }
 }));
 
-export default function StatCards3() {
+export default function StatCards3(dashBoardData) {
   const { palette } = useTheme();
+  console.log(dashBoardData, "600000000000000")
   const bgError = lighten(palette.error.main, 0.85);
+
+  const BookedTuff = dashBoardData?.dashBoardData?.BookedTuff || 0;  // If undefined, default to 0
+  const pitch = dashBoardData?.dashBoardData?.pitch || 0;  // If undefined, default to 0
+  const totalRevenue = dashBoardData?.dashBoardData?.totalRevenue || 0;  // If undefined, default to 0
+
 
   return (
     <Grid container spacing={3} sx={{ mb: 3 }}>
@@ -58,7 +64,7 @@ export default function StatCards3() {
             <H3 color="#08ad6c">Total Pitch</H3>
           </ContentBox>
           <ContentBox sx={{ p: 2 }}>
-            <H1>2</H1>
+            <H1>{pitch}</H1>
           </ContentBox>
         </Card>
       </Grid>
@@ -72,7 +78,7 @@ export default function StatCards3() {
             <H3 color="#08ad6c">Total Booking</H3>
           </ContentBox>
           <ContentBox sx={{ p: 2 }}>
-            <H1>18</H1>
+            <H1>{BookedTuff}</H1>
           </ContentBox>
         </Card>
       </Grid>
@@ -87,7 +93,7 @@ export default function StatCards3() {
             <H3 color="#08ad6c">Total Revenue</H3>
           </ContentBox>
           <ContentBox sx={{ p: 2 }}>
-            <H1>9000</H1>
+            <H1>{totalRevenue}</H1>
           </ContentBox>
         </Card>
       </Grid>

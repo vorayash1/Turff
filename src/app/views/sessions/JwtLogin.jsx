@@ -91,7 +91,7 @@ export default function JwtLogin() {
         <Grid container>
           <Grid item sm={6} xs={12}>
             <div className="img-wrapper">
-              <img src="/assets/images/illustrations/dreamer.svg" width="100%" alt="" />
+              <img src="/assets/images/illustrations/lighthouse.svg" width="100%" alt="" />
             </div>
           </Grid>
           <Grid item sm={6} xs={12}>
@@ -175,7 +175,7 @@ export default function JwtLogin() {
                     >
                       Login
                     </LoadingButton>
-                    <Paragraph>
+                    {/* <Paragraph>
                       Don't have an account?
                       <NavLink
                         to="/session/signup"
@@ -183,7 +183,7 @@ export default function JwtLogin() {
                       >
                         Register
                       </NavLink>
-                    </Paragraph>
+                    </Paragraph> */}
                   </form>
                 )}
               </Formik>
