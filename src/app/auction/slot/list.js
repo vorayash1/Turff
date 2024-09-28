@@ -21,7 +21,7 @@ function TeamList() {
     const [priceUpdates, setPriceUpdates] = useState({});
 
     const [currentPage, setCurrentPage] = useState(1); // Current page
-    const [totalPages, setTotalPages] = useState(3); // Total pages
+    const [totalPages, setTotalPages] = useState(50); // Total pages
     const [limit] = useState(10); // Items per page
 
     const {
