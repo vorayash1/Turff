@@ -14,6 +14,7 @@ import Footer from "../../components/Footer"; // Import Footer component
 import Layout1Topbar from "app/components/MatxLayout/Layout1/Layout1Topbar";
 import axios from "axios";
 import { useMediaQuery, useTheme } from "@mui/material";
+import "../../auction/turf.css";
 
 // STYLED COMPONENTS
 const ContentBox = styled("div")(({ theme }) => ({
@@ -83,7 +84,7 @@ export default function Analytics() {
       console.error('Error fetching dashboard data:', error);
     }
   };
-
+  const totalRevenue = dashBoardData?.totalRevenue || {};
   return (
     <Fragment>
       <Layout1Topbar />
@@ -104,7 +105,7 @@ export default function Analytics() {
               {role === "admin" && (
                 <>
                   <StatCards dashBoardData={dashBoardData || {}} />
-                  <TopSellingTable />
+                  {/* <TopSellingTable /> */}
                   <StatCards2 dashBoardData={dashBoardData || {}} />
                 </>
               )}
@@ -113,7 +114,7 @@ export default function Analytics() {
               {role === "tuff_owner" && (
                 <>
                   <StatCards3 dashBoardData={dashBoardData || {}} />
-                  <TopSellingTable />
+                  <TopSellingTable dashBoardData={dashBoardData || {}} totalRevenue={totalRevenue || {}} />
 
                 </>
               )}

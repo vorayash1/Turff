@@ -17,6 +17,9 @@ input[type="number"] {
   .container2 {
     width: 100% !important;
   }
+  .container2sub {
+    width: 100% !important;
+  }
 }
 @media only screen and (min-width: 900px) {
   .container2 {
@@ -27,7 +30,12 @@ input[type="number"] {
   .container2 {
     width: 80% !important;
   }
+  .container2sub {
+    width: 77% !important;
+  }
 }
-.container2sub {
-  width: 77% !important;
+@media only screen and (max-width: 1200px) {
+  .container2 {
+    width: 100% !important;
+  }
 }

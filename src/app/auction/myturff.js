@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Fragment, useEffect, useState, useRef } from "react";
-import { styled, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { styled, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import '@grapecity/wijmo.styles/wijmo.css';
 import './myauction.css';
@@ -12,6 +12,7 @@ import SidenavTheme from "app/components/MatxTheme/SidenavTheme/SidenavTheme";
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Layout1Topbar from "app/components/MatxLayout/Layout1/Layout1Topbar";
 
 // STYLED COMPONENTS
 const ContentBox = styled("div")(({ theme }) => ({
@@ -34,10 +35,14 @@ export default function MyAuction() {
     const { layout1Settings } = settings;
     const theme = useTheme();
 
-    const [turfs, setTurfs] = useState([]); // State to hold the fetched data
-    const [open, setOpen] = useState(false); // State for dialog
-    const [selectedTurffId, setSelectedTurffId] = useState(null); // State to hold the selected turff ID
-    const [newStatus, setNewStatus] = useState(""); // Change this to an empty string
+    const [turfs, setTurfs] = useState([]);
+    const [open, setOpen] = useState(false);
+    const [selectedTurffId, setSelectedTurffId] = useState(null);
+    const [newStatus, setNewStatus] = useState("");
+
+    // States for password change dialog
+    const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
+    const [newPassword, setNewPassword] = useState("");
 
     const {
         leftSidebar: { mode: sidenavMode, show: showSidenav }
@@ -59,18 +64,18 @@ export default function MyAuction() {
     }, [isMdScreen]);
 
     const fetchTurfs = async () => {
-        const token = localStorage.getItem('token'); // Get the token from localStorage
+        const token = localStorage.getItem('token');
 
         try {
             const response = await axios.get('https://myallapps.tech:3024/api/admin/tuff/get', {
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Include the token in the header
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
 
-            const result = response.data.data.tuffData || [];  // Get the tuff data from the response
-            setTurfs(result);  // Update the state with the fetched data
+            const result = response.data.data.tuffData || [];
+            setTurfs(result);
         } catch (error) {
             console.error('Error fetching turfs:', error);
             toast.error('Failed to fetch turfs.');
@@ -78,47 +83,73 @@ export default function MyAuction() {
     };
 
     const handleEdit = (id) => {
-        navigate(`/auction/editturf/${id}`);  // Pass the turf ID to the edit page
+        navigate(`/auction/editturf/${id}`);
     };
 
     const handleActivateDeactivate = (id, currentStatus) => {
         setSelectedTurffId(id);
-        // Set newStatus based on currentStatus
-        setNewStatus(currentStatus === 'active' ? 'deactive' : 'active'); // Toggle the status to string
-        setOpen(true); // Open the confirmation dialog
+        setNewStatus(currentStatus === 'active' ? 'deactive' : 'active');
+        setOpen(true);
     };
 
     const handleConfirm = async () => {
-        const token = localStorage.getItem('token'); // Get the token from localStorage
+        const token = localStorage.getItem('token');
 
         try {
             await axios.post('https://myallapps.tech:3024/api/admin/tuff/activeDeactive', {
                 tuff_id: selectedTurffId,
-                status: newStatus, // Send the string status
+                status: newStatus,
             }, {
                 headers: {
-                    'Authorization': `Bearer ${token}`, // Include the token in the header
+                    'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
             });
 
             toast.success('Turff status updated successfully.');
-            fetchTurfs(); // Refresh the turfs after updating status
+            fetchTurfs();
         } catch (error) {
             console.error('Error updating turff status:', error);
             toast.error('Failed to update turff status.');
         } finally {
-            setOpen(false); // Close the dialog
+            setOpen(false);
         }
     };
 
-    const handleList = () => {
-        navigate("/auction/booking/list");
-        toast.info("Navigating to player list page.");
+    // New function to handle password change
+    const handlePasswordChange = async () => {
+        const token = localStorage.getItem('token');
+
+        try {
+            await axios.post('https://myallapps.tech:3024/api/admin/tuff/changePassword', {
+                tuff_id: selectedTurffId,
+                new_password: newPassword,
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            toast.success('Password changed successfully.');
+        } catch (error) {
+            console.error('Error changing password:', error);
+            toast.error('Failed to change password.');
+        } finally {
+            setOpenPasswordDialog(false);
+            setNewPassword("");
+        }
+    };
+
+    const openPasswordDialogHandler = (id) => {
+        setSelectedTurffId(id);
+        setOpenPasswordDialog(true);
     };
 
     return (
         <>
+            <Layout1Topbar />
+
             <Container>
                 <div className="container1">
                     {showSidenav && sidenavMode !== "close" && (
@@ -130,17 +161,19 @@ export default function MyAuction() {
                 <div className="container2">
                     <Fragment>
                         <ContentBox className="auction">
-                            <Button
-                                color="primary"
-                                variant="contained"
-                                sx={{ textTransform: "capitalize" }}
-                                onClick={() => {
-                                    navigate(-1);
-                                    toast.info("Navigating back.");
-                                }}
-                            >
-                                Go Back
-                            </Button>
+                            {!isMdScreen && (
+                                <Button
+                                    color="primary"
+                                    variant="contained"
+                                    sx={{ textTransform: "capitalize" }}
+                                    onClick={() => {
+                                        navigate(-1);
+                                        toast.info("Navigating back.");
+                                    }}
+                                >
+                                    Go Back
+                                </Button>
+                            )}
                             <h1 style={{ textAlign: "center" }}>Turff List</h1>
                             <div className="row mb-3">
                                 <div className="col-md-12 text-center">
@@ -152,7 +185,7 @@ export default function MyAuction() {
                                     </button>
                                 </div>
                             </div>
-                            <div className="">
+                            <div className="table-responsive">
                                 <table className="mat-elevation-z5 mdc-table">
                                     <thead>
                                         <tr className="mdc-table-header-row">
@@ -166,19 +199,14 @@ export default function MyAuction() {
                                             <th>Status</th>
                                             <th>Coordinates</th>
                                             <th>Images</th>
+                                            <th>Change Password</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {turfs.length > 0 ? (
                                             turfs.map((turff) => (
-                                                <tr className="mdc-table-row" key={turff._id}>
-                                                    <td >
-                                                        {/* <div className="tooltip-wrapper">
-                                                            <button type="button" className="tooltips mdc-icon-button mdc-ripple-upgraded--unbounded" onClick={() => handleEdit(turff._id)}>
-                                                                <i className="material-icons">edit</i>
-                                                                <span className="tooltiptexts">Edit Turff</span>
-                                                            </button>
-                                                        </div> */}
+                                                <tr className={`mdc-table-row ${turff.status === 'deactive' ? 'inactive-turff' : ''}`} key={turff._id}>
+                                                    <td>
                                                         <div className="tooltip-wrapper">
                                                             <button type="button" className="tooltips mdc-icon-button mdc-ripple-upgraded--unbounded" onClick={() => handleActivateDeactivate(turff._id, turff.status)}>
                                                                 <i className="material-icons">{turff.status === 'active' ? 'toggle_on' : 'toggle_off'}</i>
@@ -206,11 +234,14 @@ export default function MyAuction() {
                                                             ))
                                                         ) : 'No Images'}
                                                     </td>
+                                                    <td>
+                                                        <Button variant="outlined" onClick={() => openPasswordDialogHandler(turff._id)}>Change Password</Button>
+                                                    </td>
                                                 </tr>
                                             ))
                                         ) : (
                                             <tr className="mdc-table-row">
-                                                <td colSpan="10" style={{ textAlign: 'center' }}>No turfs available</td>
+                                                <td colSpan="11" style={{ textAlign: 'center' }}>No turfs available</td>
                                             </tr>
                                         )}
                                     </tbody>
@@ -232,6 +263,30 @@ export default function MyAuction() {
                 <DialogActions>
                     <Button onClick={() => setOpen(false)} color="primary">Cancel</Button>
                     <Button onClick={handleConfirm} color="primary">{newStatus === 'active' ? 'Activate' : 'Deactivate'}</Button>
+                </DialogActions>
+            </Dialog>
+
+            {/* Password Change Dialog */}
+            <Dialog open={openPasswordDialog} onClose={() => setOpenPasswordDialog(false)}>
+                <DialogTitle>Change Password</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Enter a new password for this turff.
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        label="New Password"
+                        type="password"
+                        fullWidth
+                        variant="outlined"
+                        value={newPassword}
+                        onChange={(e) => setNewPassword(e.target.value)}
+                    />
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => setOpenPasswordDialog(false)} color="primary">Cancel</Button>
+                    <Button onClick={handlePasswordChange} color="primary">Change Password</Button>
                 </DialogActions>
             </Dialog>
 

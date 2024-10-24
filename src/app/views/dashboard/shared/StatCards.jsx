@@ -30,13 +30,13 @@ const Heading = styled("h6")(({ theme }) => ({
 }));
 
 export default function StatCards(props) {
-  // console.log(props, "99999999999")
-  const tuffData = props.dashBoardData.tuff;
+  console.log(props, "99999999999")
+  const tuffData = props.dashBoardData;
   const cardList = [
-    { name: "Total turff", amount: tuffData ? tuffData : "", Icon: Group },
-    { name: "This week Bookings", amount: "20", Icon: Gavel },
-    { name: "Active turff", amount: "137", Icon: Store },
-    { name: "Inactive turff", amount: "6", Icon: Upcoming }
+    { name: "Total turff", amount: tuffData ? tuffData.totalTuffCount : "", Icon: Group },
+    // { name: "This week Bookings", amount: "20", Icon: Gavel },
+    { name: "Active turff", amount: tuffData ? tuffData.activeTuffCount : "", Icon: Store },
+    // { name: "Inactive turff", amount: "6", Icon: Upcoming }
   ];
 
   return (

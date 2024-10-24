@@ -49,7 +49,7 @@ export default function StatCards3(dashBoardData) {
 
   const BookedTuff = dashBoardData?.dashBoardData?.BookedTuff || 0;  // If undefined, default to 0
   const pitch = dashBoardData?.dashBoardData?.pitch || 0;  // If undefined, default to 0
-  const totalRevenue = dashBoardData?.dashBoardData?.totalRevenue || 0;  // If undefined, default to 0
+  // const totalRevenue = dashBoardData?.dashBoardData?.totalRevenue.dailyRevenue || 0;  // If undefined, default to 0
 
 
   return (
@@ -82,11 +82,11 @@ export default function StatCards3(dashBoardData) {
           </ContentBox>
         </Card>
       </Grid>
-      <Grid item xs={12} md={6}>
+      {/* <Grid item xs={12} md={6}>
         <Card elevation={3} sx={{ p: 2 }}>
           <ContentBox>
             <FabIcon size="medium" sx={{ background: "rgba(9, 182, 109, 0.15)" }}>
-              {/* <TrendingUp color="success" /> */}
+              <TrendingUp color="success" />
               <StarOutline color="error" />
 
             </FabIcon>
@@ -96,7 +96,7 @@ export default function StatCards3(dashBoardData) {
             <H1>{totalRevenue}</H1>
           </ContentBox>
         </Card>
-      </Grid>
+      </Grid> */}
       {/* <Grid item xs={12} md={6}>
         <Card elevation={3} sx={{ p: 2 }}>
           <ContentBox>
