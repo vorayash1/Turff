@@ -40,9 +40,12 @@ export default function MyAuction() {
     const [selectedTurffId, setSelectedTurffId] = useState(null);
     const [newStatus, setNewStatus] = useState("");
 
-    // States for password change dialog
     const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
     const [newPassword, setNewPassword] = useState("");
+
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalPages, setTotalPages] = useState(20);
+    const limit = 10; // Items per page
 
     const {
         leftSidebar: { mode: sidenavMode, show: showSidenav }
@@ -61,13 +64,13 @@ export default function MyAuction() {
         fetchTurfs(); // Fetch turfs when component mounts
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isMdScreen]);
+    }, [isMdScreen, currentPage]);
 
     const fetchTurfs = async () => {
         const token = localStorage.getItem('token');
 
         try {
-            const response = await axios.get('https://myallapps.tech:3024/api/admin/tuff/get', {
+            const response = await axios.get(`https://myallapps.tech:3024/api/admin/tuff/get?page=${currentPage}&limit=${limit}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
@@ -76,6 +79,7 @@ export default function MyAuction() {
 
             const result = response.data.data.tuffData || [];
             setTurfs(result);
+            setTotalPages(response.data.data.totalRecords || 20); // Assuming the API returns totalPages
         } catch (error) {
             console.error('Error fetching turfs:', error);
             toast.error('Failed to fetch turfs.');
@@ -116,7 +120,6 @@ export default function MyAuction() {
         }
     };
 
-    // New function to handle password change
     const handlePasswordChange = async () => {
         const token = localStorage.getItem('token');
 
@@ -144,6 +147,18 @@ export default function MyAuction() {
     const openPasswordDialogHandler = (id) => {
         setSelectedTurffId(id);
         setOpenPasswordDialog(true);
+    };
+
+    const handleNextPage = () => {
+        if (currentPage < totalPages) {
+            setCurrentPage(prev => prev + 1);
+        }
+    };
+
+    const handlePreviousPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(prev => prev - 1);
+        }
     };
 
     return (
@@ -179,7 +194,7 @@ export default function MyAuction() {
                                 <div className="col-md-12 text-center">
                                     <button
                                         onClick={() => navigate("/auction/addturf")}
-                                        className={`btn btn-sm btn-success mb-2`}
+                                        className="btn btn-sm btn-success mb-2"
                                     >
                                         Add Turff
                                     </button>
@@ -246,6 +261,12 @@ export default function MyAuction() {
                                         )}
                                     </tbody>
                                 </table>
+                            </div>
+                            {/* Pagination Controls */}
+                            <div className="pagination-controls text-center">
+                                <Button disabled={currentPage === 1} onClick={handlePreviousPage}>Previous</Button>
+                                <span> Page {currentPage} of {totalPages} </span>
+                                <Button disabled={currentPage === totalPages} onClick={handleNextPage}>Next</Button>
                             </div>
                         </ContentBox>
                     </Fragment>

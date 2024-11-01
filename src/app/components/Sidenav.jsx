@@ -31,7 +31,7 @@ export default function Sidenav({ children }) {
   const { settings, updateSettings } = useSettings();
 
   const state = useGlobalContext();
-  console.log(state)
+  // console.log(state)
   const role = (state.user == null) ? "" : state.user.type;
 
   const updateSidebarMode = (sidebarSettings) => {

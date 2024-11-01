@@ -7,6 +7,7 @@ import Layout1Sidenav from 'app/components/MatxLayout/Layout1/Layout1Sidenav';
 import SidenavTheme from "app/components/MatxTheme/SidenavTheme/SidenavTheme";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import axios from 'axios';
+import { FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
 const SimpleForm = () => {
     const [userData, setUserData] = useState(null);
@@ -39,7 +40,8 @@ const SimpleForm = () => {
 
     const handleChange = (event) => {
         const { name, value, files } = event.target;
-        if (name.startsWith('image_') && files.length > 0) {
+
+        if (name.startsWith('image') && files.length > 0) {
             const selectedImages = Array.from(files).slice(0, 4);  // Limit to 4 images
             setImageFiles(selectedImages);  // Store selected images
         } else {
@@ -56,10 +58,17 @@ const SimpleForm = () => {
             formData.append(key, state[key]);
         });
 
-        // Append images if any are selected
-        imageFiles.forEach((file, index) => {
-            formData.append(`image_${index}`, file);
+        // formData.append("image", imageFiles);
+
+        imageFiles.forEach((image) => {
+            formData.append('image', image); // use the same key 'images[]'
         });
+
+
+        // Append images if any are selected
+        // imageFiles.forEach((file, index) => {
+        //     formData.append(`image`, file);
+        // });
 
         try {
             const response = await axios.post('https://myallapps.tech:3024/api/admin/tuff/create', formData, {
@@ -135,18 +144,15 @@ const SimpleForm = () => {
                 <form onSubmit={handleSubmit}>
                     <Grid container spacing={3} style={{ paddingRight: "10px" }}>
                         {/* Image Upload */}
-                        {Array.from({ length: 4 }).map((_, index) => (
-                            <Grid item xs={12} sm={6} key={index}>
-                                <TextField
-                                    type="file"
-                                    name={`image_${index}`}  // Ensure name matches expected Multer field
-                                    // label={`Upload Image ${index + 1}`}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    inputProps={{ accept: "image/*" }}  // Limit to image files
-                                />
-                            </Grid>
-                        ))}
+                        <Grid item xs={12} sm={6} >
+                            <TextField
+                                type="file"
+                                name={`image`}
+                                onChange={handleChange}
+                                fullWidth
+                                inputProps={{ accept: "image/*", multiple: true }}  // Limit to image files
+                            />
+                        </Grid>
 
                         {/* Email Field */}
                         <Grid item xs={12} sm={6}>
@@ -263,15 +269,19 @@ const SimpleForm = () => {
                             />
                         </Grid>
                         <Grid item xs={12} sm={6}>
-                            <TextField
-                                type="text"
-                                name="sport_type"
-                                label="Sport Type (Required)"
-                                onChange={handleChange}
-                                fullWidth
-                                required
-                                value={state.sport_type}
-                            />
+                            <FormControl fullWidth required>
+                                <InputLabel>Sport Type (Required)</InputLabel>
+                                <Select
+                                    name="sport_type"
+                                    label="Sport Type (Required)"
+                                    value={state.sport_type}
+                                    onChange={handleChange}
+                                >
+                                    <MenuItem value="cricket">Cricket</MenuItem>
+                                    <MenuItem value="volleyball">Volleyball</MenuItem>
+                                    <MenuItem value="football">Football</MenuItem>
+                                </Select>
+                            </FormControl>
                         </Grid>
 
                         {/* Submit and Cancel buttons */}
