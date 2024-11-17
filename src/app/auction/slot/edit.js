@@ -81,7 +81,7 @@ function UpdateTeam() {
             });
 
             if (response.ok) {
-                navigate("/auction/team/list");
+                navigate("/team/list");
             } else {
                 console.error('Error saving team:', response.statusText);
                 alert('Error saving team. Please try again later.');
@@ -100,7 +100,7 @@ function UpdateTeam() {
         setSelectedLogo(null);
         setLogoPreview(null);
         setLogoError(false);
-        navigate("/auction/team/list");
+        navigate("/team/list");
     };
 
     const handleLogoChange = (event) => {

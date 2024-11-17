@@ -113,7 +113,7 @@ function EditPlayerPage() {
             });
             const data = await response.json();
             console.log(data);
-            navigate('/auction/player/list');
+            navigate('/player/list');
         } catch (error) {
             console.error("Error editing player:", error);
         }

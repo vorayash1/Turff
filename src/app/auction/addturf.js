@@ -78,7 +78,7 @@ const SimpleForm = () => {
                 }
             });
             console.log('Tuff created successfully:', response.data);
-            navigate('/auction/myturff');
+            navigate('/myturff');
         } catch (error) {
             console.error('Error adding tuff:', error);
             setError('Error adding tuff. Please try again later.');

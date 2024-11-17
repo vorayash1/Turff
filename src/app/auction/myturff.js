@@ -87,7 +87,7 @@ export default function MyAuction() {
     };
 
     const handleEdit = (id) => {
-        navigate(`/auction/editturf/${id}`);
+        navigate(`/editturf/${id}`);
     };
 
     const handleActivateDeactivate = (id, currentStatus) => {
@@ -193,7 +193,7 @@ export default function MyAuction() {
                             <div className="row mb-3">
                                 <div className="col-md-12 text-center">
                                     <button
-                                        onClick={() => navigate("/auction/addturf")}
+                                        onClick={() => navigate("/addturf")}
                                         className="btn btn-sm btn-success mb-2"
                                     >
                                         Add Turff

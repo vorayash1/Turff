@@ -17,12 +17,12 @@ const routes = [
     // { path: "/", element: <StuffPage /> },
     // { path: "/session/signup", element: <JwtRegister /> },
     { path: "/session/signin", element: <JwtLogin /> },
-    { path: "/auction/booking/list", element: <PlayerList /> },
-    // { path: "/auction/myturff", element: <MyAuction /> },
-    { path: "/auction/turff", element: <Myturff /> },
-    { path: "/auction/slot/list", element: <TeamList /> },
+    { path: "/booking/list", element: <PlayerList /> },
+    // { path: "/myturff", element: <MyAuction /> },
+    { path: "/turff", element: <Myturff /> },
+    { path: "/slot/list", element: <TeamList /> },
     { path: "/dashboard/Analytics", element: <Analytics /> },
-    { path: "/auction/slot/addslot", element: <CreateTeam /> },
+    { path: "/slot/addslot", element: <CreateTeam /> },
 
 
 
