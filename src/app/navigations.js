@@ -11,5 +11,6 @@ export const tuffNavigations = [
   // { name: "My Turff", path: "/turff", icon: "account_balance" },
   { name: "All Booking List", path: "/booking/list", icon: "account_balance" },
   { name: "Slot Price", path: "/slot/list", icon: "account_balance" },
+  { name: "Pitch", path: "/pitch/list", icon: "account_balance" },
 
 ];

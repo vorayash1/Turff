@@ -11,6 +11,9 @@ const Analytics = Loadable(lazy(() => import("app/views/dashboard/Analytics")));
 const CreateTeam = Loadable(lazy(() => import("./auction/slot/addslot")));
 const Myturff = Loadable(lazy(() => import("app/auction/turff")));
 const TeamList = Loadable(lazy(() => import("./auction/slot/list")));
+const PitchForm = Loadable(lazy(() => import("./auction/pitch/addpitch")));
+const EditPitchForm = Loadable(lazy(() => import("./auction/pitch/editpitch")));
+const PitchList = Loadable(lazy(() => import("./auction/pitch/list")));
 
 const routes = [
     { path: "/", element: <StuffPage /> },
@@ -23,9 +26,9 @@ const routes = [
     { path: "/slot/list", element: <TeamList /> },
     { path: "/dashboard/Analytics", element: <Analytics /> },
     { path: "/slot/addslot", element: <CreateTeam /> },
-
-
-
+    { path: "/addpitch", element: <PitchForm /> },
+    { path: "/editpitch", element: <EditPitchForm /> },
+    { path: "/pitch/list", element: <PitchList /> },
 ]
 
 export default routes;

@@ -1,6 +1,6 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Fragment, useEffect, useState, useRef } from "react";
-import { styled, Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField } from "@mui/material";
+import { styled, Button } from "@mui/material";
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -33,10 +33,10 @@ export default function MyAuction() {
     const theme = useTheme();
 
     const [users, setUsers] = useState([]);
-    const [open, setOpen] = useState(false);
-    const [selectedUserId, setSelectedUserId] = useState(null);
+    // const [open, setOpen] = useState(false);
+    // const [selectedUserId, setSelectedUserId] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [totalPages, setTotalPages] = useState(10);
     const limit = 10; // Items per page
 
     const {
@@ -136,7 +136,7 @@ export default function MyAuction() {
                                 <table className="mat-elevation-z5 mdc-table">
                                     <thead>
                                         <tr className="mdc-table-header-row">
-                                            <th>User ID</th>
+                                            {/* <th>User ID</th> */}
                                             <th>Name</th>
                                             <th>Country Code</th>
                                             <th>Phone</th>
@@ -146,7 +146,7 @@ export default function MyAuction() {
                                         {users.length > 0 ? (
                                             users.map((user) => (
                                                 <tr className="mdc-table-row" key={user._id}>
-                                                    <td>{user._id}</td>
+                                                    {/* <td>{user._id}</td> */}
                                                     <td>{user.name || 'N/A'}</td>
                                                     <td>{user.ccode || 'N/A'}</td>
                                                     <td>{user.phone || 'N/A'}</td>
